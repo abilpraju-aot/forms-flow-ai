@@ -69,6 +69,7 @@ const API = {
   FORMIO_ROLES: `${WEB_BASE_URL}/formio/roles`,
   DASHBOARD_AUTHORIZATION: `${WEB_BASE_URL}/authorizations/dashboard`,
   USER_DASHBOARDS: `${WEB_BASE_URL}/authorizations/users/dashboard`,
+  USER_LIST: `${WEB_BASE_URL}/authorizations/designer`
 };
 
 export default API;

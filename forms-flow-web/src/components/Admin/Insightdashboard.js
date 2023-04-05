@@ -14,7 +14,8 @@ import { updateDashboardAuthorizationList } from "../../actions/dashboardActions
 import { Translation, useTranslation } from "react-i18next";
 import Head from "../../containers/Head";
 import { customDropUp } from "../Application/table";
-
+//import userList from "../../modules/authorizationReducer";
+//import { fetchUsers } from "../../apiManager/services/authorizationService";
 export const InsightDashboard = React.memo((props) => {
   const { dashboardReducer } = props;
   const dispatch = useDispatch();
@@ -29,9 +30,7 @@ export const InsightDashboard = React.memo((props) => {
   const authDashBoardList = dashboardReducer.authDashBoards;
   const isAuthRecieved = dashboardReducer.isAuthRecieved;
   const isAuthUpdated = dashboardReducer.isAuthUpdated;
-
   const { t } = useTranslation();
-
   const [anchorEl, setAnchorEl] = useState(null);
   const [remainingGroups, setRemainingGroups] = useState([]);
 

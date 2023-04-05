@@ -1,14 +1,19 @@
 import React, { useState } from "react";
+import { useSelector,useDispatch } from "react-redux";
+import Popover from "@material-ui/core/Popover";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import ListGroup from "react-bootstrap/ListGroup";
+import { Button } from "react-bootstrap";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import TextField from "@material-ui/core/TextField";
-//import { useSelector } from "react-redux";
-import { useTranslation } from "react-i18next";
+import { useTranslation,Translation  } from "react-i18next";
 import SaveNext from "./SaveNext";
-//import { copyText } from "../../../apiManager/services/formatterService";
+import { copyText } from "../../../apiManager/services/formatterService";
+import { fetchUsers } from "../../../apiManager/services/authorizationService";
+import { setUserList } from "../../../actions/userListActions";
 
 const Preview = React.memo(
   ({
@@ -23,33 +28,64 @@ const Preview = React.memo(
     submitData,
   }) => {
     const { t } = useTranslation();
-    //const [copied, setCopied] = useState(false);
-    // const processListData = useSelector(
-    //   (state) => state.process.formProcessList
-    // );
-    //  taking the url and make the copy button
+    const [copied, setCopied] = useState(false);
+    const [show , setShow] = useState(false);
+    const [anchorEl , setAnchorEl] = useState(null);
+    const [remainingGroups , setRemainingGroups] = useState([]);
+    const groups = [{"groups":"formsflow/formsflow-designer"}];
+    const processListData = useSelector(
+      (state) => state.process.formProcessList
+    );
+    const dispatch = useDispatch();
+    // useEffect(() => {
+    //   dispatch(fetchUsers());
+    // }, [dispatch]);
 
-    // const copyPublicUrl = () => {
-    //   const originUrl = window.origin;
-    //   const url = `${originUrl}/public/form/${formData.form.path}`;
+    // useEffect(() => {
+    //   dispatch(setUserList(""));
+    // }, [dispatch]);
 
-    //   copyText(url).then(() => {
-    //     setCopied(() => {
-    //       setTimeout(() => {
-    //         setCopied(false);
-    //       }, 3000);
-    //       return true;
-    //     });
-    //   }).catch((err) => {
-    //     console.error(err);
-    //   });
+     //taking the url and make the copy button
+    const roles = useSelector(state => state.userAuthorization);
+    console.log("user",roles,setUserList);
+    const copyPublicUrl = () => {
+    const originUrl = window.origin;
+    const url = `${originUrl}/public/form/${formData.form.path}`;
+      copyText(url).then(() => {
+        setCopied(() => {
+          setTimeout(() => {
+            setCopied(false);
+          }, 3000);
+          return true;
+        });
+      }).catch((err) => {
+        console.error(err);
+      });
 
-    // };
+    };
     const [selectedOption, setSelectedOption] = useState("");
     const handleOptionChange = (event) => {
       setSelectedOption(event.target.value);
     };
-    const isLoggedIn = false;
+    const handleClose = () => {
+      setShow(false);
+      setAnchorEl(null);
+    };
+
+
+    const handleClick = (event) => {
+      dispatch(fetchUsers());
+      console.log("set",setRemainingGroups,groups,event);
+      // let approvedGroupIds = roles;
+      // let listGroup = groups.filter(
+      //   (item) => approvedGroupIds.includes(item.path) === false
+      // );
+      // //setActiveRow(rowData);
+      // setRemainingGroups(listGroup);
+      // setShow(!show);
+      // setAnchorEl(event.currentTarget);
+    };
+
     return (
       <div>
         <Grid
@@ -100,7 +136,7 @@ const Preview = React.memo(
                       {workflow && workflow.label ? workflow.label : "-"}
                     </span>
                   </div>
-                  {/* {processListData.anonymous && (
+                  {processListData.anonymous && (
                     <div>
                       <span className="fontsize-16">
                         {t("Copy anonymous form URL")}
@@ -125,7 +161,7 @@ const Preview = React.memo(
                         />
                       </div>
                     </div>
-                  )} */}
+                  )}
                   <div className="mt-2">
                     <span className="font-weight-bold">
                       Designer Permission
@@ -161,24 +197,50 @@ const Preview = React.memo(
                         Specific Designers/Group
                       </label>
                     </div>
-                    {isLoggedIn ? (
-                      <div className="form-group d-flex">
-                        <div className="mr-2">
-                          <label>Group</label>
-                          <div>
-                            <i className="fa fa-users mr-3 p-2 border" />
-                          </div>
-                        </div>
-                        <div>
-                          <label>Identifier</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="exampleFormControlInput1"
-                            placeholder="Enter Role Id"
-                          />
-                        </div>
-                      </div>
+                    {selectedOption === "option3" ? (
+                       <div>
+                       <Button
+                         //data-testid={rowIdx}
+                         onClick={(e) => handleClick(e)}
+                         className="btn btn-primary btn-md form-btn pull-left btn-left"
+                         //disabled={!isGroupUpdated}
+                       >
+                         <Translation>{(t) => t("Add")}</Translation> <b>+</b>
+                       </Button>
+                       <Popover
+                         data-testid="popup-component"
+                         //id={id}
+                         open={show}
+                         anchorEl={anchorEl}
+                         onClose={handleClose}
+                         anchorOrigin={{
+                           vertical: "bottom",
+                           horizontal: "center",
+                         }}
+                         transformOrigin={{
+                           vertical: "top",
+                           horizontal: "center",
+                         }}
+                       >
+                         <ListGroup>
+                           {remainingGroups.length > 0 ? (
+                             remainingGroups.map((item, key) => (
+                               <ListGroup.Item
+                                 key={key}
+                                 as="button"
+                                 //onClick={() => addDashboardAuth(item)}
+                               >
+                                 {item.path}
+                               </ListGroup.Item>
+                             ))
+                           ) : (
+                             <ListGroup.Item>{`${t(
+                               "All groups have access to the dashboard"
+                             )}`}</ListGroup.Item>
+                           )}
+                         </ListGroup>
+                       </Popover>
+                     </div>
                     ) : (
                       ""
                     )}
@@ -206,7 +268,7 @@ const Preview = React.memo(
                         Specific Users/Group
                       </label>
                     </div>
-                    {isLoggedIn ? (
+                    {selectedOption === "option2" ? (
                       <div className="form-group d-flex">
                         <div className="mr-2">
                           <label>Group</label>

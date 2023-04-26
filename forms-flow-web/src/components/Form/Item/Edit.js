@@ -122,60 +122,7 @@ const Edit = React.memo(() => {
     }
   }, [processListData]);
 
-
-
-
-  useEffect(() => {
-    if (processListData?.parentFormId && !formHistory.length) {
-      getFormHistory(processListData?.parentFormId).then((res) => {
-        dispatch(setFormHistories(res.data));
-      }).catch(() => {
-        setFormHistories([]);
-      });
-    }
-  }, [processListData]);
-
-
-
-
-  useEffect(() => {
-    if (processListData?.parentFormId && !formHistory.length) {
-      getFormHistory(processListData?.parentFormId).then((res) => {
-        dispatch(setFormHistories(res.data));
-      }).catch(() => {
-        setFormHistories([]);
-      });
-    }
-  }, [processListData]);
-
-
-
-
-  useEffect(() => {
-    if (processListData?.parentFormId && !formHistory.length) {
-      getFormHistory(processListData?.parentFormId).then((res) => {
-        dispatch(setFormHistories(res.data));
-      }).catch(() => {
-        setFormHistories([]);
-      });
-    }
-  }, [processListData]);
-
-
-
-
-  useEffect(() => {
-    if (processListData?.parentFormId && !formHistory.length) {
-      getFormHistory(processListData?.parentFormId).then((res) => {
-        dispatch(setFormHistories(res.data));
-      }).catch(() => {
-        setFormHistories([]);
-      });
-    }
-  }, [processListData]);
-
-
-
+  
 
   useEffect(() => {
     if (restoredFormId) {

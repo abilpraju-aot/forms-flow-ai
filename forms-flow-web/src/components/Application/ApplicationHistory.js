@@ -24,6 +24,8 @@ const HistoryList = React.memo((props) => {
   const applicationId = props.applicationId;
   const tenantKey = useSelector((state) => state.tenants?.tenantId);
   const applicationDetail = useSelector((state) => state.applications?.applicationDetail);
+  const task = useSelector((state) => state.bpmTasks.taskDetail);
+  const formType = applicationDetail.formType || task?.formType;
   const redirectUrl = MULTITENANCY_ENABLED ? `/tenant/${tenantKey}/` : "/";
   const { t } = useTranslation();
   useEffect(() => {
@@ -66,7 +68,7 @@ const HistoryList = React.memo((props) => {
     <ToolkitProvider
       keyField="created"
       data={appHistory}
-      columns={columns_history(redirectUrl,applicationDetail)}
+      columns={columns_history(redirectUrl,formType)}
       search
     >
       {(props) => (

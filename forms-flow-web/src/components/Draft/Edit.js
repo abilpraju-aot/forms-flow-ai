@@ -348,7 +348,7 @@ const View = React.memo((props) => {
                   onSubmit={(data) => {
                     setPoll(false);
                     exitType.current = "SUBMIT";
-                    onSubmit(data, form._id, isPublic);
+                    onSubmit(data, form._id, isPublic, processData);
                   }}
                   onCustomEvent={(evt) => onCustomEvent(evt, redirectUrl)}
                 />

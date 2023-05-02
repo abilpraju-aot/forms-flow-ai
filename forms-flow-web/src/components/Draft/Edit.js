@@ -398,6 +398,7 @@ const doProcessActions = (submission, ownProps) => {
     if (processData.formType === "bundle") {
       data.data = submission.data;
     }
+    const loadingDispatch = processData.formType === "bundle" ? setBundleSubmitLoading : setFormSubmissionLoading;
     let draft_id = state.draft.submission?.id;
     let isDraftCreated = draft_id ? true : false;
     const applicationCreateAPI = selectApplicationCreateAPI(
@@ -407,7 +408,7 @@ const doProcessActions = (submission, ownProps) => {
     );
     dispatch(
       applicationCreateAPI(data, draft_id ? draft_id : null, (err) => {
-        dispatch(setFormSubmissionLoading(false));
+        dispatch(loadingDispatch(false));
         if (!err) {
           toast.success(
             <Translation>{(t) => t("Submission Saved")}</Translation>
@@ -447,7 +448,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onSubmit: (submission, formId, isPublic, processData) => {
-      dispatch(setFormSubmissionLoading(true));
+      const isBundle = processData.formType === "bundle";
+      const loadingDispatch = isBundle ? setBundleSubmitLoading : setFormSubmissionLoading;
+      if(!isBundle) dispatch(loadingDispatch(true));
       // this is callback function for submission
       const callBack = (err, submission) => {
         if (!err) {
@@ -464,15 +467,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           toast.error(
             <Translation>{(t) => t("Error while Submission.")}</Translation>
           );
-          dispatch(setFormSubmissionLoading(false));
-          dispatch(setBundleSubmitLoading(false));
+          dispatch(loadingDispatch(false)); 
           dispatch(setFormSubmissionError(ErrorDetails));
         }
       };
       if (CUSTOM_SUBMISSION_URL && CUSTOM_SUBMISSION_ENABLE) {
         postCustomSubmission(submission, formId, isPublic, callBack);
       } else {
-        if (processData.formType === "bundle") {
+        if (isBundle) {
           formioPostSubmission(submission, formId, true)
             .then((res) => {
               dispatch(setBundleSubmissionData({ data: res.data.data }));
@@ -485,7 +487,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
               };
               toast.error("Submission cannot be done.");
               dispatch(setFormSubmissionError(ErrorDetails));
-              dispatch(setBundleSubmitLoading(false));
+              dispatch(loadingDispatch(false));
             });
         } else {
           dispatch(saveSubmission("submission", submission, formId, callBack));

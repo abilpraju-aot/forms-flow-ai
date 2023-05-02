@@ -3,6 +3,7 @@ package org.camunda.bpm.extension.hooks.listeners;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.camunda.bpm.extension.commons.connector.HTTPServiceInvoker;
+import org.camunda.bpm.extension.commons.utils.RestAPIBuilderConfigProperties;
 import org.camunda.bpm.extension.hooks.listeners.data.RequestStateData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,6 +48,8 @@ public class RequestStateListenerTest {
     @Mock
     private Authentication auth;
 
+    @Mock
+    private RestAPIBuilderConfigProperties restAPIBuilderConfigProperties;
 
     /**
      * RequestStateListener will be invoked with DelegateExecution parameter

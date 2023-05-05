@@ -28,6 +28,7 @@ import java.util.Map;
 
 import static org.camunda.bpm.extension.commons.utils.VariableConstants.FORM_URL;
 import static org.camunda.bpm.extension.commons.utils.VariableConstants.APPLICATION_ID;
+import static org.camunda.bpm.extension.commons.utils.VariableConstants.FORM_TYPE;
 
 /**
  * External Submission Listener.
@@ -51,7 +52,8 @@ public class ExternalSubmissionListener extends BaseListener implements Executio
     public void notify(DelegateExecution execution) {
         try {
             String formUrl = getFormUrl(execution);
-            String submissionId = formSubmissionService.createSubmission(formUrl, formSubmissionService.createFormSubmissionData(execution.getVariables()));
+            String formType = String.valueOf(execution.getVariable(FORM_TYPE));
+            String submissionId = formSubmissionService.createSubmission(formUrl, formType, formSubmissionService.createFormSubmissionData(execution.getVariables()));
             if(StringUtils.isNotBlank(submissionId)){
                 execution.setVariable(FORM_URL, formUrl+"/"+submissionId);
                 createApplication(execution, true);

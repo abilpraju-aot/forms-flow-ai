@@ -87,7 +87,7 @@ public class ExternalSubmissionListenerTest {
                 .thenReturn(variables);
         when(formSubmissionService.createFormSubmissionData(any()))
                 .thenReturn("{data:{}}");
-        when(formSubmissionService.createSubmission(anyString(), anyString()))
+        when(formSubmissionService.createSubmission(anyString(), anyString(), anyString()))
                 .thenReturn("id1");
         when(execution.getVariable(FORM_URL))
                 .thenReturn(formUrl);
@@ -155,7 +155,7 @@ public class ExternalSubmissionListenerTest {
                 .thenReturn(variables);
         when(formSubmissionService.createFormSubmissionData(any()))
                 .thenReturn("{data:{}}");
-        when(formSubmissionService.createSubmission(anyString(), anyString()))
+        when(formSubmissionService.createSubmission(anyString(), anyString(), anyString()))
                 .thenReturn("id1");
         when(execution.getVariable(FORM_URL))
                 .thenReturn(formUrl);
@@ -195,7 +195,7 @@ public class ExternalSubmissionListenerTest {
                 .thenReturn(variables);
         when(formSubmissionService.createFormSubmissionData(any()))
                 .thenReturn("{data:{}}");
-        when(formSubmissionService.createSubmission(anyString(), anyString()))
+        when(formSubmissionService.createSubmission(anyString(), anyString(), anyString()))
                 .thenReturn("id1");
         when(execution.getVariable(FORM_URL))
                 .thenReturn(formUrl);
@@ -237,7 +237,7 @@ public class ExternalSubmissionListenerTest {
                 .thenReturn(variables);
         when(formSubmissionService.createFormSubmissionData(any()))
                 .thenReturn("{data:{}}");
-        when(formSubmissionService.createSubmission(anyString(), anyString()))
+        when(formSubmissionService.createSubmission(anyString(), anyString(), anyString()))
                 .thenReturn("id1");
         when(execution.getVariable(FORM_URL))
                 .thenReturn(formUrl);

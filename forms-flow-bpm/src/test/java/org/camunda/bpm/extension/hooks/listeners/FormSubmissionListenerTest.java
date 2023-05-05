@@ -22,6 +22,7 @@ import java.util.Map;
 
 import static org.camunda.bpm.extension.commons.utils.VariableConstants.FORM_URL;
 import static org.camunda.bpm.extension.commons.utils.VariableConstants.WEB_FORM_URL;
+import static org.camunda.bpm.extension.commons.utils.VariableConstants.FORM_TYPE;
 
 /**
  * Form Submission Listener Test.
@@ -48,6 +49,7 @@ public class FormSubmissionListenerTest {
         String expectedFormUrl = "http://localhost:3001/form/id2";
         String actualWebFormUrl = "http://localhost:3000/form/id1";
         String expectedWebFormUrl = "http://localhost:3000/form/id2";
+        String formType = "form";
         Map<String, Object> variables = new HashMap<>();
         variables.put(FORM_URL, actualFormUrl);
         variables.put(WEB_FORM_URL, actualWebFormUrl);
@@ -55,9 +57,11 @@ public class FormSubmissionListenerTest {
         delegateExecution.setVariable(WEB_FORM_URL, actualWebFormUrl);
         when(delegateExecution.getVariables())
                 .thenReturn(variables);
-        when(formSubmissionService.createRevision(actualFormUrl))
+        when(delegateExecution.getVariable(FORM_TYPE))
+                .thenReturn(formType);
+        when(formSubmissionService.createRevision(actualFormUrl, formType))
                 .thenReturn("id2");
-        when(formSubmissionService.createRevision(actualWebFormUrl))
+        when(formSubmissionService.createRevision(actualWebFormUrl, formType))
                 .thenReturn("id2");
         formSubmissionListener.notify(delegateExecution);
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
@@ -80,6 +84,7 @@ public class FormSubmissionListenerTest {
         String expectedFormUrl = "http://localhost:3001/form/id2";
         String actualWebFormUrl = "http://localhost:3000/form/id1";
         String expectedWebFormUrl = "http://localhost:3000/form/id2";
+        String formType = "form";
         Map<String, Object> variables = new HashMap<>();
         variables.put(FORM_URL, actualFormUrl);
         variables.put(WEB_FORM_URL, actualWebFormUrl);
@@ -89,9 +94,11 @@ public class FormSubmissionListenerTest {
                 .thenReturn(delegateExecution);
         when(delegateExecution.getVariables())
                 .thenReturn(variables);
-        when(formSubmissionService.createRevision(actualFormUrl))
+        when(delegateExecution.getVariable(FORM_TYPE))
+                .thenReturn(formType);
+        when(formSubmissionService.createRevision(actualFormUrl, formType))
                 .thenReturn("id2");
-        when(formSubmissionService.createRevision(actualWebFormUrl))
+        when(formSubmissionService.createRevision(actualWebFormUrl, formType))
                 .thenReturn("id2");
         formSubmissionListener.notify(delegateExecution);
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
@@ -111,6 +118,7 @@ public class FormSubmissionListenerTest {
         DelegateTask delegateTask = mock(DelegateTask.class);
         DelegateExecution delegateExecution = mock(DelegateExecution.class);
         String actualFormUrl = "http://localhost:3001/form/id1";
+        String formType = "form";
         Map<String, Object> variables = new HashMap<>();
         variables.put(FORM_URL, actualFormUrl);
         delegateTask.setVariable(FORM_URL, actualFormUrl);
@@ -118,8 +126,10 @@ public class FormSubmissionListenerTest {
                 .thenReturn(delegateExecution);
         when(delegateExecution.getVariables())
                 .thenReturn(variables);
+        when(delegateExecution.getVariable(FORM_TYPE))
+                .thenReturn(formType);
         doThrow(new IOException("Unable to read submission for: "+ actualFormUrl))
-                .when(formSubmissionService).createRevision(actualFormUrl);
+                .when(formSubmissionService).createRevision(actualFormUrl, formType);
         assertThrows(RuntimeException.class, () -> {
             formSubmissionListener.notify(delegateTask);
         });
@@ -133,13 +143,16 @@ public class FormSubmissionListenerTest {
     public void createRevision_with_delegateExecution_and_exception_test() throws Exception {
         DelegateExecution delegateExecution = mock(DelegateExecution.class);
         String actualFormUrl = "http://localhost:3001/form/id1";
+        String formType = "form";
         Map<String, Object> variables = new HashMap<>();
         variables.put(FORM_URL, actualFormUrl);
         delegateExecution.setVariable(FORM_URL, actualFormUrl);
         when(delegateExecution.getVariables())
                 .thenReturn(variables);
+        when(delegateExecution.getVariable(FORM_TYPE))
+                .thenReturn(formType);
         doThrow(new IOException("Unable to read submission for: "+ actualFormUrl))
-                .when(formSubmissionService).createRevision(actualFormUrl);
+                .when(formSubmissionService).createRevision(actualFormUrl, formType);
         assertThrows(RuntimeException.class, () -> {
             formSubmissionListener.notify(delegateExecution);
         });

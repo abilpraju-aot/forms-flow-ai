@@ -43,6 +43,7 @@ public class FormSubmissionServiceTest {
     private HTTPServiceInvoker httpServiceInvoker;
 
     private static final String formUrl = "http://localhost:3001/form/615d4097163a6c58ae2e7668/submission";
+    private static final String formType = "form";
 
     @BeforeEach
     public void setup() {
@@ -92,7 +93,7 @@ public class FormSubmissionServiceTest {
         when(httpServiceInvoker.execute(anyString(), any(HttpMethod.class), any()))
                 .thenReturn(new ResponseEntity<>("{}", HttpStatus.OK))
                 .thenReturn(new ResponseEntity<>("{\"_id\":\"ID1\"}", HttpStatus.CREATED));
-        String actual = formSubmissionService.createRevision(formUrl);
+        String actual = formSubmissionService.createRevision(formUrl, formType);
         assertEquals(expected, actual);
     }
     
@@ -105,7 +106,7 @@ public class FormSubmissionServiceTest {
         String expected = null;
         when(httpServiceInvoker.execute(anyString(), any(HttpMethod.class), any()))
                 .thenReturn(new ResponseEntity<>("", HttpStatus.OK));
-        String actual = formSubmissionService.createRevision(formUrl);
+        String actual = formSubmissionService.createRevision(formUrl, formType);
         assertEquals(expected, actual);
     }
 
@@ -119,7 +120,7 @@ public class FormSubmissionServiceTest {
                 .thenReturn(new ResponseEntity<>("{}", HttpStatus.OK))
                 .thenReturn(new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR));
         assertThrows(RuntimeException.class, () -> {
-            formSubmissionService.createRevision(formUrl);
+            formSubmissionService.createRevision(formUrl, formType);
         });
     }
 
@@ -132,7 +133,7 @@ public class FormSubmissionServiceTest {
         String expected = "ID1";
         when(httpServiceInvoker.execute(anyString(), any(HttpMethod.class), any()))
                 .thenReturn(new ResponseEntity<>("{\"_id\":\"ID1\"}", HttpStatus.CREATED));
-        String actual = formSubmissionService.createSubmission(formUrl, "{}");
+        String actual = formSubmissionService.createSubmission(formUrl, formType, "{}");
         assertEquals(expected, actual);
     }
     
@@ -145,7 +146,7 @@ public class FormSubmissionServiceTest {
         when(httpServiceInvoker.execute(anyString(), any(HttpMethod.class), any()))
                 .thenReturn(new ResponseEntity<>("{\"_id\":\"ID1\"}", HttpStatus.INTERNAL_SERVER_ERROR));
         assertThrows(RuntimeException.class, () -> {
-            formSubmissionService.createSubmission(formUrl, "{}");
+            formSubmissionService.createSubmission(formUrl, formType, "{}");
         });
     }
     

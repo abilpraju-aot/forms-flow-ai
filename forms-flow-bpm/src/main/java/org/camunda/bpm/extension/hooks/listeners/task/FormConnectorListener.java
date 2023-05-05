@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static org.camunda.bpm.extension.commons.utils.VariableConstants.FORM_URL;
+import static org.camunda.bpm.extension.commons.utils.VariableConstants.FORM_TYPE;
 
 /**
  * Form Connector Listener.
@@ -67,6 +68,7 @@ public class FormConnectorListener extends BaseListener implements TaskListener 
      */
     private String createSubmission(String sourceFormUrl, String targetFormUrl,DelegateTask delegateTask) throws IOException {
         String submission = formSubmissionService.readSubmission(sourceFormUrl);
+        String formType = String.valueOf(delegateTask.getVariable(FORM_TYPE));
         Map<String,Object> superVariables = new HashMap<>();
         List<String> supFields =  this.fields != null && this.fields.getValue(delegateTask) != null ?
                 bpmObjectMapper.readValue(String.valueOf(this.fields.getValue(delegateTask)),List.class): null;
@@ -74,7 +76,7 @@ public class FormConnectorListener extends BaseListener implements TaskListener 
         for(String entry : supFields) {
             superVariables.put(entry, delegateTask.getExecution().getVariables().get(entry));
         }
-        return  formSubmissionService.createSubmission(targetFormUrl, createFormSubmissionData(submission, superVariables, getPropogateData(delegateTask)));
+        return  formSubmissionService.createSubmission(targetFormUrl, formType,createFormSubmissionData(submission, superVariables, getPropogateData(delegateTask)));
     }
 
     /**

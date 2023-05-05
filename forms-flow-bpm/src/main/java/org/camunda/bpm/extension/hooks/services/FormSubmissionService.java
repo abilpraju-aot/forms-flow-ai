@@ -52,13 +52,13 @@ public class FormSubmissionService {
         }
     }
 
-    public String createRevision(String formUrl) throws IOException {
+    public String createRevision(String formUrl, String formType) throws IOException {
         String submission =  readSubmission(formUrl);
         if(StringUtils.isBlank(submission)) {
             LOGGER.log(Level.SEVERE,"Unable to read submission for "+formUrl);
             return null;
         }
-        ResponseEntity<String> response =  httpServiceInvoker.execute(getSubmissionUrl(formUrl), HttpMethod.POST, submission);
+        ResponseEntity<String> response =  httpServiceInvoker.execute(getSubmissionUrl(formUrl, formType), HttpMethod.POST, submission);
         if(response.getStatusCode().value() == HttpStatus.CREATED.value()) {
             JsonNode jsonNode = bpmObjectMapper.readTree(response.getBody());
             String submissionId = jsonNode.get("_id").asText();
@@ -69,8 +69,8 @@ public class FormSubmissionService {
         }
     }
 
-    public String createSubmission(String formUrl, String submission) throws IOException {
-        ResponseEntity<String> response =  httpServiceInvoker.execute(getSubmissionUrl(formUrl), HttpMethod.POST, submission);
+    public String createSubmission(String formUrl, String formType, String submission) throws IOException {
+        ResponseEntity<String> response =  httpServiceInvoker.execute(getSubmissionUrl(formUrl, formType), HttpMethod.POST, submission);
         if(response.getStatusCode().value() == HttpStatus.CREATED.value()) {
             JsonNode jsonNode = bpmObjectMapper.readTree(response.getBody());
             String submissionId = jsonNode.get("_id").asText();
@@ -93,11 +93,13 @@ public class FormSubmissionService {
         }
     }
 
-    private String getSubmissionUrl(String formUrl){
-        if(StringUtils.endsWith(formUrl,"submission")) {
-            return formUrl;
+    private String getSubmissionUrl(String formUrl, String formType) {
+        boolean isBundle= formType != null && formType.equals("bundle");
+        String urlPrefix = StringUtils.substringBeforeLast(formUrl, "/");
+        if (StringUtils.endsWith(formUrl, "submission")) {
+            return isBundle ? formUrl + "?skip-sanitize=true" : formUrl;
         }
-        return StringUtils.substringBeforeLast(formUrl,"/");
+        return isBundle ? urlPrefix + "?skip-sanitize=true" : urlPrefix;
     }
 
     public Map<String,Object> retrieveFormValues(String formUrl) throws IOException {

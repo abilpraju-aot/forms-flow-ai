@@ -35,10 +35,8 @@ const Item = React.memo(() => {
   const dispatch = useDispatch();
   // const showViewSubmissions= useSelector((state) => state.user.showViewSubmissions);
   //const path = props.location.pathname;
-  const applicationId = useSelector(
-    (state) =>
-      selectRoot("submission", state)?.submission?.data?.applicationId || null
-  );
+  const applicationId = useSelector(state => 
+    state.bundle?.bundleSubmission?.data?.applicationId || null);
   const userRoles = useSelector((state) => {
     return selectRoot("user", state).roles;
   });

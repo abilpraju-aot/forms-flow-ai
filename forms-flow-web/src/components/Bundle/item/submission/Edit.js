@@ -18,6 +18,7 @@ import { Errors } from "react-formio/lib/components";
 import Loading from "../../../../containers/Loading";
 import SubmissionError from "../../../../containers/SubmissionError";
 import {
+  CLIENT,
   CUSTOM_SUBMISSION_ENABLE,
   CUSTOM_SUBMISSION_URL,
   MULTITENANCY_ENABLED,
@@ -30,9 +31,11 @@ import {
   updateCustomSubmission,
 } from "../../../../apiManager/services/FormServices";
 import {
+  CLIENT_EDIT_STATUS,
   UPDATE_EVENT_STATUS,
   getProcessDataReq,
 } from "../../../../constants/applicationConstants";
+import { getUserRolePermission } from "../../../../helper/user";
  
 const Edit = ({ bundleIdProp, onBundleSubmit, submissionIdProp, onCustomEvent }) => {
   const { bundleId, submissionId } = useParams();
@@ -48,6 +51,9 @@ const Edit = ({ bundleIdProp, onBundleSubmit, submissionIdProp, onCustomEvent })
   const redirectUrl = MULTITENANCY_ENABLED ? `/tenant/${tenantKey}/` : "/";
   const applicationDetails = useSelector(
     (state) => state.applications.applicationDetail
+  );
+  const userRoles = useSelector(
+    (state) => state.user?.roles
   );
   const formSubmissionError = useSelector(
     (state) => state.formDelete.formSubmissionError
@@ -80,6 +86,25 @@ const Edit = ({ bundleIdProp, onBundleSubmit, submissionIdProp, onCustomEvent })
     };
   }, [bundleId, dispatch]);
 
+  useEffect(() => {
+    if (applicationDetails?.status && !onBundleSubmit) {
+      if (
+        getUserRolePermission(userRoles, CLIENT) &&
+        !CLIENT_EDIT_STATUS.includes(applicationDetails?.status)
+      ) {
+        dispatch(push(`/form/${bundleId}/submission/${submissionId}`));
+      }
+    }
+  }, [
+    applicationDetails,
+    userRoles,
+    dispatch,
+    submissionId,
+    bundleId,
+    onBundleSubmit,
+  ]);
+
+
   const onConfirmSubmissionError = () => {
     const ErrorDetails = {
       modalOpen: false,
@@ -87,11 +112,12 @@ const Edit = ({ bundleIdProp, onBundleSubmit, submissionIdProp, onCustomEvent })
     };
     dispatch(setFormSubmissionError(ErrorDetails));
   };
-
  
   const onSubmit = (bundleSubmission,bundleId,customEventData) => {
     const callBack = (err, submission) => {
       if (!err) {
+        console.log(UPDATE_EVENT_STATUS.includes(applicationDetails.applicationStatus));
+        console.log(UPDATE_EVENT_STATUS, applicationDetails.applicationStatus);
         if (
           UPDATE_EVENT_STATUS.includes(applicationDetails.applicationStatus)
         ) {

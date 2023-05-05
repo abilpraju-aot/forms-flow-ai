@@ -134,7 +134,7 @@ public class FormConnectorListenerTest {
 				.thenReturn("Y");
 		when(formSubmissionService.readSubmission(anyString()))
 				.thenReturn("{\"data\": {\"Form1\": \"Complete Submission\", \"Form3\": \"Review Submission\" }}");
-		when(formSubmissionService.createSubmission(anyString(), anyString()))
+		when(formSubmissionService.createSubmission(anyString(), anyString(), anyString()))
 				.thenReturn("submissionid1");
 		
 		formConnectorListener.notify(delegateTask);
@@ -191,7 +191,7 @@ public class FormConnectorListenerTest {
 		when(formSubmissionService.readSubmission(anyString()))
 				.thenReturn("{\"data\": {\"Form1\": \"Complete Submission\", \"Form3\": \"Review Submission\" }}");
 		formConnectorListener.notify(delegateTask);
-		when(formSubmissionService.createSubmission(anyString(), anyString()))
+		when(formSubmissionService.createSubmission(anyString(), anyString(), anyString()))
 				.thenReturn("submissionid1");
 		
 		formConnectorListener.notify(delegateTask);
@@ -250,7 +250,7 @@ public class FormConnectorListenerTest {
 		formConnectorListener.notify(delegateTask);
 		verify(formSubmissionService, times(0))
 				.getFormIdByName(anyString());
-		when(formSubmissionService.createSubmission(anyString(), anyString()))
+		when(formSubmissionService.createSubmission(anyString(), anyString(), anyString()))
 				.thenReturn("submissionid1");
 		
 		formConnectorListener.notify(delegateTask);
@@ -321,7 +321,7 @@ public class FormConnectorListenerTest {
 				.thenReturn(json);
 		when(formSubmissionService.readSubmission(anyString()))
 				.thenReturn("{\"data\": {\"Form1\": \"Complete Submission\", \"Form3\": \"Review Submission\" }}");
-		when(formSubmissionService.createSubmission(anyString(), anyString()))
+		when(formSubmissionService.createSubmission(anyString(), anyString(), anyString()))
 				.thenThrow(IOException.class);
 
 		assertThrows(RuntimeException.class, () -> {

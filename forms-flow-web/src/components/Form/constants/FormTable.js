@@ -185,7 +185,7 @@ function FormTable() {
             <thead>
               <tr>
                 <th colSpan="4">
-                  <InputGroup className="input-group">             
+                  <InputGroup className="input-group col-4 p-0">             
                     <FormControl
                       value={search}
                       onChange={(e) => {
@@ -236,7 +236,7 @@ function FormTable() {
               </tr>
               <tr className="table-header table-bordered">
               <th scope="col">
-              <span className="sort-cell">
+              <span className="sort-cell" style={{ display: 'flex', gap: '1rem' }}>
                     <span> Form Name</span>
                       <span > 
                      {isAscending ? (

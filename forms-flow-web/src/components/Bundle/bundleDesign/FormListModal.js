@@ -86,7 +86,8 @@ const FormListModal = React.memo(
         formType,
         canBudle,
       ];
-      dispatch(setBundleFormListLoading(true));
+      dispatch(setBundleFormListLoading(false));
+      setLoadingForms(false);
       dispatch(
         fetchBPMFormList(...filters, () => {
           setLoadingForms(false);
@@ -219,35 +220,20 @@ const FormListModal = React.memo(
                           <TableRow>
                             <StyledTableCell></StyledTableCell>
                             <StyledTableCell>
-                            <span className="sort-cell">
+                            <span className="sort-cell" style={{ display: 'flex', gap: '1rem' }}>
                             <span> Form Name</span>
                               <span >   
-                             {isAscending ? (
-                                <i
-                                className="fa fa-sort-alpha-asc m"
-                                onClick={() => {updateSort("desc");}}
-                                data-toggle="tooltip"  title="Descending"
-                                style={{
-                                  cursor: "pointer",
-                                  fontSize : "16px",
-                                  marginTop : "3px"
-          
-                                }}
-                                ></i>
-                                ) : (
-                                <i
-                                className="fa fa-sort-alpha-desc"
-                                onClick={() => {updateSort("asc");}}
-                                data-toggle="tooltip"  title="Ascending" 
-                                style={{
-                                  cursor: "pointer",
-                                  fontSize : "16px",
-                                  marginTop : "3px"
-                                  
-                                }}
-                                ></i>
-                                )
-                              }
+                              <i
+                              className={`fa fa-sort-alpha-${isAscending ? 'asc' : 'desc'}`}
+                              onClick={() => updateSort(isAscending ? 'desc' : 'asc')}
+                              data-toggle="tooltip"
+                              title={isAscending ? 'Descending' : 'Ascending'}
+                              style={{
+                                cursor: 'pointer',
+                                fontSize: '16px',
+                                marginTop: '3px'
+                              }}
+                            ></i>                            
                               </span>
                       </span>
                             </StyledTableCell>

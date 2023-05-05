@@ -126,7 +126,7 @@ function BundleTable() {
         <thead>
           <tr>
             <th colSpan="4" >
-              <InputGroup className="input-group">          
+              <InputGroup className="input-group col-4 px-0">          
                 <FormControl 
                   value={search}
                   onChange={(e)=>{setSearch(e.target.value);}}
@@ -151,7 +151,7 @@ function BundleTable() {
           </tr>
           <tr className="table-header table-bordered" style={{backgroundColor:'#F2F2F2'}}>
             <th scope="col">
-            <span className="sort-cell">
+            <span className="sort-cell" style={{ display: 'flex', gap: '1rem' }}>
                   <span> Bundle Name</span>
                     <span >       
                    {isAscending ? (

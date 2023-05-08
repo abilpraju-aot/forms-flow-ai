@@ -86,8 +86,7 @@ const FormListModal = React.memo(
         formType,
         canBudle,
       ];
-      dispatch(setBundleFormListLoading(false));
-      setLoadingForms(false);
+      dispatch(setBundleFormListLoading(true));
       dispatch(
         fetchBPMFormList(...filters, () => {
           setLoadingForms(false);
@@ -182,7 +181,7 @@ const FormListModal = React.memo(
               </span>
             </div>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body style={{ maxHeight: "400px", overflowY: "hidden" }}>
             {loadingForms ? (
               <Loading />
             ) : (
@@ -197,13 +196,13 @@ const FormListModal = React.memo(
                 />
                 {search && (
                   <InputGroup.Append onClick={handleClearSearch}>
-                    <InputGroup.Text style={{ backgroundColor: "#ffff" }}>
+                    <InputGroup.Text style={{ backgroundColor: "#ffff",cursor: 'pointer' }}>
                       <i className="fa fa-times"></i>
                     </InputGroup.Text>
                   </InputGroup.Append>
                 )}
                 <InputGroup.Append  onClick={handleSearch} disabled={!search?.trim()}>
-                  <InputGroup.Text style={{ backgroundColor: "#ffff" }}>
+                  <InputGroup.Text style={{ backgroundColor: "#ffff",cursor: 'pointer'}}>
                     <i className="fa fa-search"></i>
                   </InputGroup.Text>
                 </InputGroup.Append>
@@ -219,10 +218,9 @@ const FormListModal = React.memo(
                         <TableHead>
                           <TableRow>
                             <StyledTableCell></StyledTableCell>
-                            <StyledTableCell>
-                            <span className="sort-cell" style={{ display: 'flex', gap: '1rem' }}>
-                            <span> Form Name</span>
-                              <span >   
+                            <StyledTableCell className="sort-cell" style={{ display: 'flex', gap: '1rem' }}>
+                            <>Form Name</>
+                              <>   
                               <i
                               className={`fa fa-sort-alpha-${isAscending ? 'asc' : 'desc'}`}
                               onClick={() => updateSort(isAscending ? 'desc' : 'asc')}
@@ -234,8 +232,7 @@ const FormListModal = React.memo(
                                 marginTop: '3px'
                               }}
                             ></i>                            
-                              </span>
-                      </span>
+                              </>
                             </StyledTableCell>
                             <StyledTableCell>Type</StyledTableCell>
                             <StyledTableCell>Action</StyledTableCell>

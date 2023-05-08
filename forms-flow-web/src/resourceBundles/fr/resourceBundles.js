@@ -279,7 +279,8 @@ export const RESOURCE_BUNDLES_FR = {
   "Click Here to Copy":"Cliquez ici pour copier",
   "Resources":"Ressources",
   "Duplicate form created successfully":"Formulaire en double créé avec succès",
-  "Revert": "Revenir"
+  "Revert": "Revenir",
+
 
 };
 

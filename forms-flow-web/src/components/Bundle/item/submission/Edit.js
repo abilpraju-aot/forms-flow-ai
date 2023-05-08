@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import BundleSubmissionView from "../BundleSubmissionComponent";
 import {
   setBundleLoading,
@@ -7,7 +7,7 @@ import {
   setBundleSubmitLoading,
 } from "../../../../actions/bundleActions";
 import {
-  setFormFailureErrorData,
+//  setFormFailureErrorData,
   setFormSubmissionError,
 } from "../../../../actions/formActions";
 import { getFormProcesses } from "../../../../apiManager/services/processServices";
@@ -45,7 +45,6 @@ const Edit = ({ bundleIdProp, onBundleSubmit, submissionIdProp, onCustomEvent })
   const bundleSubmission = useSelector(
     (state) => state.bundle.bundleSubmission
   );
-  const { error } = useSelector((state) => state.form);
   const loading = useSelector((state) => state.bundle.bundleLoading);
   const tenantKey = useSelector((state) => state.tenants?.tenantId);
   const redirectUrl = MULTITENANCY_ENABLED ? `/tenant/${tenantKey}/` : "/";
@@ -58,14 +57,15 @@ const Edit = ({ bundleIdProp, onBundleSubmit, submissionIdProp, onCustomEvent })
   const formSubmissionError = useSelector(
     (state) => state.formDelete.formSubmissionError
   );
-
+  const [errors, setErrors] = useState(null);
 
   useEffect(() => {
     dispatch(setBundleLoading(true));
     dispatch(
       getFormProcesses(bundleIdProp || bundleId, (err, data) => {
         if (err) {
-          dispatch(setFormFailureErrorData("form", err));
+          //dispatch(setFormFailureErrorData("form", err));
+          setErrors(err);
           dispatch(setBundleLoading(false));
         } else {
           executeRule(bundleSubmission || {}, data.id)
@@ -73,7 +73,8 @@ const Edit = ({ bundleIdProp, onBundleSubmit, submissionIdProp, onCustomEvent })
               dispatch(setBundleSelectedForms(res.data));
             })
             .catch((err) => {
-              dispatch(setFormFailureErrorData("form", err));
+              //dispatch(setFormFailureErrorData("form", err));
+              setErrors(err);
             })
             .finally(() => {
               dispatch(setBundleLoading(false));
@@ -204,6 +205,15 @@ const Edit = ({ bundleIdProp, onBundleSubmit, submissionIdProp, onCustomEvent })
       </div>
     );
   }
+
+  if(errors) { 
+    return (
+      <div className="p-3">
+        <Errors errors={errors} /> 
+      </div>
+    );
+  }
+
   return (
     <div className="p-3">
          <div className="d-flex align-items-center justify-content-between">
@@ -217,7 +227,6 @@ const Edit = ({ bundleIdProp, onBundleSubmit, submissionIdProp, onCustomEvent })
         onConfirm={onConfirmSubmissionError}
       ></SubmissionError>
       <div>
-        {!selectedForms?.length ? <Errors errors={error} /> : ""}
         {selectedForms?.length ? (
           <BundleSubmissionView onSubmit={onSubmit} />
         ) : (

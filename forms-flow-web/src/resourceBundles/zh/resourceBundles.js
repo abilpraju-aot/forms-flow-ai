@@ -277,7 +277,8 @@ export const RESOURCE_BUNDLES_ZH = {
   "Click Here to Copy":"点击这里复制",
   "Resources":"资源",
   "Duplicate form created successfully":"成功创建重复表单",
-  "Revert": "恢复"
+  "Revert": "恢复",
+
 
 };
 

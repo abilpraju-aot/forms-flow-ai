@@ -3,7 +3,6 @@ import BundleSubmissionView from "../BundleSubmissionComponent";
 import { 
   setBundleSelectedForms,
 } from "../../../../actions/bundleActions";
-import { setFormFailureErrorData } from "../../../../actions/formActions";
 import { getFormProcesses } from "../../../../apiManager/services/processServices";
 import { executeRule } from "../../../../apiManager/services/bundleServices";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,15 +19,15 @@ const BundleView = ({ bundleIdProp , showPrintButton = false}) => {
   const bundleSubmission = useSelector(
     (state) => state.bundle.bundleSubmission
   );
-  const { error } = useSelector((state) => state.form);
   const [loading,setLoading] = useState(false);
+  const [errors, setErrors] = useState(null);
 
   useEffect(() => {
     setLoading(true);
     dispatch(
       getFormProcesses(bundleIdProp || bundleId, (err, data) => {
         if (err) {
-          dispatch(setFormFailureErrorData("form", err));
+          setErrors(err); 
           setLoading(false);
         } else {
           executeRule(bundleSubmission || {}, data.id)
@@ -36,7 +35,7 @@ const BundleView = ({ bundleIdProp , showPrintButton = false}) => {
               dispatch(setBundleSelectedForms(res.data));
             })
             .catch((err) => {
-              dispatch(setFormFailureErrorData("form", err));
+              setErrors(err); 
             })
             .finally(() => {
               setLoading(false);
@@ -56,6 +55,15 @@ const BundleView = ({ bundleIdProp , showPrintButton = false}) => {
       </div>
     );
   }
+
+  if(errors) { 
+    return (
+      <div className="p-3">
+        <Errors errors={errors} /> 
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="d-flex align-items-center justify-content-between">
@@ -65,7 +73,6 @@ const BundleView = ({ bundleIdProp , showPrintButton = false}) => {
       <hr />
 
       <div>
-        {!selectedForms.length ? <Errors errors={error} /> : ""}
         {selectedForms.length ? <BundleSubmissionView readOnly={true} /> : ""}
       </div>
     </>

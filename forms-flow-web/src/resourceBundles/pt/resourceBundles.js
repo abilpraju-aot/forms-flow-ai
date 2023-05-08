@@ -278,7 +278,7 @@ export const RESOURCE_BUNDLES_PT = {
   "Click Here to Copy":"Clique aqui para copiar",
   "Resources":"Recursos",
   "Duplicate form created successfully":"Formulário duplicado criado com sucesso",
-  "Revert": "Reverter"
+  "Revert": "Reverter",
 
 
 

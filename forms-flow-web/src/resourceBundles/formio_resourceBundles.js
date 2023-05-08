@@ -296,7 +296,7 @@ export const formio_resourceBundles = {
     "Process name(s) must not be empty":"Process name(s) must not be empty",
     "URL copied":"URL copied",
     "Click Here to Copy":"Click Here to Copy",
-    "Revert": "Revert"
+    "Revert": "Revert",
 
   },
 
@@ -1208,7 +1208,8 @@ export const formio_resourceBundles = {
     "Process name(s) must not be empty":"进程名称不能为空",
     "URL copied":"已复制网址",
     "Click Here to Copy":"点击这里复制",
-    "Revert": "恢复"
+    "Revert": "恢复",
+
   },
 
   bg: {
@@ -2177,7 +2178,7 @@ export const formio_resourceBundles = {
     "Process name(s) must not be empty":"Името(ата) на процесите не трябва да са празни",
     "URL copied":"URL адресът е копиран",
     "Click Here to Copy":"Щракнете тук, за да копирате",
-    "Revert": "Връщане"
+    "Revert": "Връщане",
 
   },
 
@@ -3141,7 +3142,7 @@ export const formio_resourceBundles = {
     "Process name(s) must not be empty":"O(s) nome(s) do processo não deve(m) estar vazio(s)",
     "URL copied":"URL copiado",
     "Click Here to Copy":"Clique aqui para copiar",
-    "Revert": "Reverter"
+    "Revert": "Reverter",
 
   },
 
@@ -4113,7 +4114,7 @@ export const formio_resourceBundles = {
     "Process name(s) must not be empty":"Le(s) nom(s) de processus ne doivent pas être vides",
     "URL copied":"URL copiée",
     "Click Here to Copy":"Cliquez ici pour copier",
-    "Revert":"Revenir"
+    "Revert":"Revenir",
 
   },
 
@@ -5088,8 +5089,7 @@ export const formio_resourceBundles = {
     "Process name(s) must not be empty":"Prozessname(n) dürfen nicht leer sein",
     "URL copied":"URL kopiert",
     "Click Here to Copy":"Klicken Sie hier, um zu kopieren",
-    "Revert":"Zurückkehren"
-
+    "Revert":"Zurückkehren",
 
 
 

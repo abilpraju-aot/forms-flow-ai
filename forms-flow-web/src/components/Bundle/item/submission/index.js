@@ -43,19 +43,26 @@ const Item = React.memo(() => {
   const applicationStatus = useSelector(
     (state) => state.applications.applicationDetail?.applicationStatus || ""
   );
-  const [showSubmissionLoading, setShowSubmissionLoading] = useState(false);
+  const [showSubmissionLoading, setShowSubmissionLoading] = useState(true);
   const [editAllowed, setEditAllowed] = useState(false);
-
+  const [loading , setLoading] = useState(true);
   useEffect(() => {
     dispatch(clearSubmissionError("submission"));
     dispatch(resetSubmission("submission"));
     dispatch(clearFormError("form"));
     dispatch(resetBundleData());
+    setLoading(true);
     if (CUSTOM_SUBMISSION_URL && CUSTOM_SUBMISSION_ENABLE) {
-      dispatch(getCustomSubmission(submissionId, bundleId));
+      dispatch(getCustomSubmission(submissionId, bundleId,(_,res) => {
+        dispatch(setBundleSubmissionData({ data: res.data.data }));
+        setLoading(false);
+      }));
     } else {
       formioGetSubmission(bundleId, submissionId).then((res) => {
         dispatch(setBundleSubmissionData({ data: res.data.data }));
+        setLoading(false);
+      }).catch(()=>{
+        setLoading(false);
       });
     }
   }, [submissionId, bundleId, dispatch]);
@@ -82,13 +89,14 @@ const Item = React.memo(() => {
     if (editAllowed && applicationStatus) setShowSubmissionLoading(false);
   }, [applicationStatus, editAllowed]);
 
+  
   return (
     <div>
       <Switch>
         <Route
           exact
           path={`${BASE_ROUTE}bundle/:bundleId/submission/:submissionId`}
-          component={View}
+          component={loading ? Loading : View}
         />
         <Redirect
           exact
@@ -104,7 +112,7 @@ const Item = React.memo(() => {
         {editAllowed ? (
           <Route
             path={`${BASE_ROUTE}bundle/:bundleId/submission/:submissionId/edit`}
-            component={Edit}
+            component={loading ? Loading : Edit}
           />
         ) : null}
         <Route

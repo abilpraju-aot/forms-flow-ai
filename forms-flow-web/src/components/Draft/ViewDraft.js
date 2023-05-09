@@ -18,6 +18,7 @@ import { setDraftDetail } from "../../actions/draftActions";
 import ProcessDiagram from "../BPMN/ProcessDiagramHook";
 import { setBundleSubmissionData } from "../../actions/bundleActions";
 import BundleView from "../Bundle/item/submission/View";
+import { BUNDLED_FORM } from "../../constants/applicationConstants";
 
 const ViewDraft = React.memo(() => {
   const { t } = useTranslation();
@@ -40,7 +41,7 @@ const ViewDraft = React.memo(() => {
           if (res.id && res.formId) {
             dispatch(getForm("form", res.formId));
           }
-          if(res.formType === "bundle"){
+          if(res.formType === BUNDLED_FORM){
             dispatch(setBundleSubmissionData({data:res.data}));
           }
         }
@@ -95,10 +96,10 @@ const ViewDraft = React.memo(() => {
         </Tab>
         <Tab
           eventKey="form"
-          title={<Translation>{(t) => t(draftDetail.formType === "bundle" ? "Forms" : "Form")}</Translation>}
+          title={<Translation>{(t) => t(draftDetail.formType === BUNDLED_FORM ? "Forms" : "Form")}</Translation>}
         >
           {
-            draftDetail.formType === "bundle" ? <BundleView bundleIdProp={draftDetail.formId} showPrintButton={false}/> :  <View page="draft-detail" showPrintButton={false} />
+            draftDetail.formType === BUNDLED_FORM ? <BundleView bundleIdProp={draftDetail.formId} showPrintButton={false}/> :  <View page="draft-detail" showPrintButton={false} />
           }
 
         </Tab>

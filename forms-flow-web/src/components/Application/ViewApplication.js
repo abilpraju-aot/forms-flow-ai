@@ -22,6 +22,7 @@ import { fetchAllBpmProcesses } from "../../apiManager/services/processServices"
 import { getCustomSubmission } from "../../apiManager/services/FormServices";
 import { setBundleSubmissionData } from "../../actions/bundleActions";
 import BundleView from "../Bundle/item/submission/View";
+import { BUNDLED_FORM } from "../../constants/applicationConstants";
 
 const ViewApplication = React.memo(() => {
   const {t} = useTranslation();
@@ -51,13 +52,13 @@ const ViewApplication = React.memo(() => {
             dispatch(getForm("form", res.formId));
             if(CUSTOM_SUBMISSION_URL && CUSTOM_SUBMISSION_ENABLE){
               dispatch(getCustomSubmission(res.submissionId,res.formId,(err,data)=>{
-                if(res.formType === "bundle"){
+                if(res.formType === BUNDLED_FORM){
                 dispatch(setBundleSubmissionData({data}));
                 }
               }));
             }else{
               dispatch(getSubmission("submission", res.submissionId, res.formId,(err,data)=>{
-                if(res.formType === "bundle"){
+                if(res.formType === BUNDLED_FORM){
                   dispatch(setBundleSubmissionData({data:data.data}));
                 }
               }));
@@ -118,10 +119,10 @@ const ViewApplication = React.memo(() => {
         </Tab>
         <Tab
           eventKey="form"
-          title={<Translation>{(t) => t(applicationDetail.formType === "bundle" ? "Forms" : "Form")}</Translation>}
+          title={<Translation>{(t) => t(applicationDetail.formType === BUNDLED_FORM ? "Forms" : "Form")}</Translation>}
         >
           {
-            applicationDetail.formType === "bundle" ? <BundleView bundleIdProp={applicationDetail.formId} showPrintButton={false}/> : <View page="application-detail" />
+            applicationDetail.formType === BUNDLED_FORM ? <BundleView bundleIdProp={applicationDetail.formId} showPrintButton={false}/> : <View page="application-detail" />
           }
          
         </Tab>

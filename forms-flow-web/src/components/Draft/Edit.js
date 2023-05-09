@@ -60,6 +60,7 @@ import {
   setBundleSubmitLoading,
 } from "../../actions/bundleActions";
 import BundleSubmit from "../Bundle/item/BundleSubmissionComponent";
+import { BUNDLED_FORM } from "../../constants/applicationConstants";
 const View = React.memo((props) => {
   const { t } = useTranslation();
   const lang = useSelector((state) => state.user.lang);
@@ -156,7 +157,7 @@ const View = React.memo((props) => {
         getFormProcesses(formId, (err, res) => {
           dispatch(clearFormError("form"));
           dispatch(clearSubmissionError("submission"));
-          if (res.formType === "bundle") {
+          if (res.formType === BUNDLED_FORM) {
             executeRule(draftSubmission.data, res.id)
               .then((bundleRes) => {
                 dispatch(setBundleSelectedForms(bundleRes.data));
@@ -317,7 +318,7 @@ const View = React.memo((props) => {
             }}
           />
           {processData?.status === "active" ? (
-            processData.formType === "bundle" ? (
+            processData.formType === BUNDLED_FORM ? (
               <BundleSubmit
                 onSubmit={(data) => {
                   setPoll(false);
@@ -395,10 +396,11 @@ const doProcessActions = (submission, ownProps) => {
     dispatch(resetSubmissions("submission"));
     const origin = `${window.location.origin}${redirectUrl}`;
     const data = getProcessReq(form, submission._id, origin);
-    if (processData.formType === "bundle") {
+    if (processData.formType === BUNDLED_FORM) {
       data.data = submission.data;
     }
-    const loadingDispatch = processData.formType === "bundle" ? setBundleSubmitLoading : setFormSubmissionLoading;
+    const loadingDispatch = processData.formType === BUNDLED_FORM
+     ? setBundleSubmitLoading : setFormSubmissionLoading;
     let draft_id = state.draft.submission?.id;
     let isDraftCreated = draft_id ? true : false;
     const applicationCreateAPI = selectApplicationCreateAPI(
@@ -448,7 +450,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onSubmit: (submission, formId, isPublic, processData) => {
-      const isBundle = processData.formType === "bundle";
+      const isBundle = processData.formType === BUNDLED_FORM;
       const loadingDispatch = isBundle ? setBundleSubmitLoading : setFormSubmissionLoading;
       if(!isBundle) dispatch(loadingDispatch(true));
       // this is callback function for submission

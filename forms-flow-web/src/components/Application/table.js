@@ -8,7 +8,7 @@ import {
   FILTER_TYPES,
 } from "react-bootstrap-table2-filter";
 import { getLocalDateTime } from "../../apiManager/services/formatterService";
-import { AWAITING_ACKNOWLEDGEMENT } from "../../constants/applicationConstants";
+import { AWAITING_ACKNOWLEDGEMENT, BUNDLED_FORM } from "../../constants/applicationConstants";
 import { Translation } from "react-i18next";
 import DateRangePicker from "@wojtekmaj/react-daterange-picker";
 import DropdownButton from "react-bootstrap/DropdownButton";
@@ -44,7 +44,7 @@ const linkApplication = (cell, row, redirectUrl) => {
 };
 
 const linkSubmission = (cell, row, redirectUrl) => {
-  const type = row.formType === "bundle" ? "bundle" : "form";
+  const type = row.formType === BUNDLED_FORM ? BUNDLED_FORM : "form";
   const url = row.isClientEdit
     ? `${redirectUrl}${type}/${row.formId}/submission/${row.submissionId}/edit`
     : `${redirectUrl}${type}/${row.formId}/submission/${row.submissionId}`;

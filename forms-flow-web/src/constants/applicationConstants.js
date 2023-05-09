@@ -7,6 +7,9 @@ export const RESUBMIT_STATUS = "Resubmit";
 export const AWAITING_ACKNOWLEDGEMENT = "Awaiting Acknowledgement";
 //export const NEW_STATUS = "New";
 
+//type of form
+export const BUNDLED_FORM = "bundle";
+
 export const CLIENT_EDIT_STATUS = [AWAITING_ACKNOWLEDGEMENT, RESUBMIT_STATUS];
 
 export const UPDATE_EVENT_STATUS = [RESUBMIT_STATUS, AWAITING_ACKNOWLEDGEMENT];

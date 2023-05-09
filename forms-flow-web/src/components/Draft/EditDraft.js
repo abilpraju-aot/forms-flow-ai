@@ -10,6 +10,7 @@ import { getDraftById } from "../../apiManager/services/draftService";
 import Edit from "./Edit";
 import { push } from "connected-react-router";
 import { setBundleSubmissionData } from "../../actions/bundleActions";
+import { BUNDLED_FORM } from "../../constants/applicationConstants";
 
 const EditDraft = React.memo(() => {
   const { draftId } = useParams();
@@ -30,7 +31,7 @@ const EditDraft = React.memo(() => {
             dispatch(getForm("form", res.formId));
             dispatch(getSubmission("submission", res.submissionId, res.formId));
           }
-          if(res.formType === "bundle"){
+          if(res.formType === BUNDLED_FORM){
             dispatch(setBundleSubmissionData({data:res.data}));
           }
         } else {

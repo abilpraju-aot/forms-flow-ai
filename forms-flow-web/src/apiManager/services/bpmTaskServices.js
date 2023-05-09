@@ -22,6 +22,7 @@ import axios from "axios";
 import { taskDetailVariableDataFormatter } from "./formatterService";
 import { REVIEWER_GROUP } from "../../constants/userContants";
 import { MAX_RESULTS } from "../../components/ServiceFlow/constants/taskConstants";
+import { BUNDLED_FORM } from "../../constants/applicationConstants";
 
 export const fetchServiceTaskList = (
   filterId,
@@ -255,10 +256,11 @@ export const getBPMTaskDetail = (taskId, ...rest) => {
                 ...taskDetail,
               };
             }
-
             dispatch(setBPMTaskDetail(taskDetail));
-            dispatch(setBPMTaskDetailLoader(false));
             dispatch(setBPMTaskDetailUpdating(false));
+            if(responses[1]?.data?.formType?.value !== BUNDLED_FORM){
+              dispatch(setBPMTaskDetailLoader(false));
+            }
             done(null, taskDetail);
           }
         })

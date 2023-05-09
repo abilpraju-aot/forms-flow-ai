@@ -117,8 +117,6 @@ const Edit = ({ bundleIdProp, onBundleSubmit, submissionIdProp, onCustomEvent })
   const onSubmit = (bundleSubmission,bundleId,customEventData) => {
     const callBack = (err, submission) => {
       if (!err) {
-        console.log(UPDATE_EVENT_STATUS.includes(applicationDetails.applicationStatus));
-        console.log(UPDATE_EVENT_STATUS, applicationDetails.applicationStatus);
         if (
           UPDATE_EVENT_STATUS.includes(applicationDetails.applicationStatus)
         ) {

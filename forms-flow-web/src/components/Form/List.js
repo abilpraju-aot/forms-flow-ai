@@ -54,6 +54,7 @@ import Tab from '@material-ui/core/Tab';
 import BundleTable from "./constants/BundleTable";
 import FormTable from "./constants/FormTable";
 import { push } from "connected-react-router";
+import { BUNDLED_FORM } from "../../constants/applicationConstants";
 
 const List = React.memo((props) => {
   const { t } = useTranslation();
@@ -117,7 +118,7 @@ const List = React.memo((props) => {
   useEffect(() => {
     // setIsLoading(false);
     dispatch(setBPMFormListLoading(true));
-    if(formType === "bundle"){
+    if(formType === BUNDLED_FORM){
       return () =>{
         dispatch(setBpmFormType(null));
       };
@@ -138,7 +139,7 @@ const List = React.memo((props) => {
 
   useEffect(()=>{
     if(location.pathname === "/form"){
-      const type = formType && formType !== "bundle" ? formType : "form";
+      const type = formType && formType !== BUNDLED_FORM ? formType : "form";
      setTabValue(0);
      dispatch(setBpmFormType(type));
     }else if(location.pathname === "/bundle") {

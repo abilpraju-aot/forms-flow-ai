@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 import moment from "moment";
 import { AppConfig } from "../../config";
+import { BUNDLED_FORM } from "../../constants/applicationConstants";
 
 export const taskSubmissionFormatter = (taskSubmissionData) => {
   const res = {};
@@ -104,7 +105,7 @@ export const getFormUrlWithFormIdSubmissionId = (formId, submissionId) => {
 };
 
 export const getFormUrl = (formId, submissionId, redirectUrl,type = "form") => {
-  return `${window.location.origin}${redirectUrl}${type === "bundle" ? "bundle" : "form"}/${formId}/submission/${submissionId}`;
+  return `${window.location.origin}${redirectUrl}${type === BUNDLED_FORM ? BUNDLED_FORM : "form"}/${formId}/submission/${submissionId}`;
 };
 
 export const getISODateTime = (date) => {

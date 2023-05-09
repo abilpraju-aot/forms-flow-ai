@@ -19,6 +19,7 @@ import {
 } from "../../../apiManager/services/processServices";
 
 import { Translation } from "react-i18next";
+import { BUNDLED_FORM } from "../../../constants/applicationConstants";
 
 const FormOperations = React.memo(({ formData }) => {
   const tenantKey = useSelector((state) => state.tenants?.tenantId);
@@ -26,12 +27,12 @@ const FormOperations = React.memo(({ formData }) => {
   const dispatch = useDispatch();
   const userRoles = useSelector((state) => state.user.roles);
   const submitNewForm = (formData) => {
-    dispatch(push(`${redirectUrl}${formData.formType === "bundle" ? 'bundle' : 'form'}/${formData._id}`));
+    dispatch(push(`${redirectUrl}${formData.formType === BUNDLED_FORM ? 'bundle' : 'form'}/${formData._id}`));
   };
   const viewOrEditForm = (formData) => {
     dispatch(resetFormProcessData());
     dispatch(setResetProcess());
-    dispatch(push(`${redirectUrl}${formData.formType === "bundle" ? 'bundleflow' : 'formflow'}/${formData._id}/view-edit`));
+    dispatch(push(`${redirectUrl}${formData.formType === BUNDLED_FORM ? 'bundleflow' : 'formflow'}/${formData._id}/view-edit`));
   };
   const deleteForms = (formData) => {
     dispatch(setIsApplicationCountLoading(true));

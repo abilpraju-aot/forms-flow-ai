@@ -1,16 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import BundleSubmission from "./BundleSubmissionComponent";
 import { useDispatch, useSelector } from "react-redux";
-import { setBundleLoading, setBundleSelectedForms, setBundleSubmissionData, setBundleSubmitLoading } from "../../../actions/bundleActions";
+import { resetBundleData, setBundleLoading, setBundleSelectedForms, setBundleSubmissionData, setBundleSubmitLoading } from "../../../actions/bundleActions";
 import { clearFormError, clearSubmissionError, setFormFailureErrorData, setFormSubmissionError } from "../../../actions/formActions";
 import { getFormProcesses } from "../../../apiManager/services/processServices";
 import { executeRule } from "../../../apiManager/services/bundleServices";
 import { Link, useParams } from "react-router-dom";
-import { DRAFT_ENABLED, MULTITENANCY_ENABLED, STAFF_DESIGNER } from "../../../constants/constants";
+import { CUSTOM_SUBMISSION_ENABLE, CUSTOM_SUBMISSION_URL, DRAFT_ENABLED, MULTITENANCY_ENABLED, STAFF_DESIGNER } from "../../../constants/constants";
 import Loading from "../../../containers/Loading";
 import { Errors } from "react-formio/lib/components";
 import SubmissionError from "../../../containers/SubmissionError";
-import { formioPostSubmission } from "../../../apiManager/services/FormServices";
+import { formioPostSubmission, postCustomSubmission } from "../../../apiManager/services/FormServices";
 import { push } from "connected-react-router";
 import { toast } from "react-toastify";
 import { getProcessReq } from "../../../apiManager/services/bpmServices";
@@ -29,8 +29,9 @@ import {
   publicDraftCreate,
   publicDraftUpdate,
 } from "../../../apiManager/services/draftService";
+import { setFormPreviosData, setFormProcessesData } from "../../../actions/processActions";
 const BundleSubmit = () => {
- 
+  
     const { bundleId } = useParams();
     const dispatch = useDispatch();
     const loading = useSelector((state) => state.bundle.bundleLoading);
@@ -63,6 +64,38 @@ const BundleSubmit = () => {
     );
 
     
+    useEffect(()=>{
+      dispatch(setBundleLoading(true));
+      dispatch(setBundleSubmissionData({}));
+      dispatch(clearFormError("form"));
+      dispatch(setFormPreviosData([]));
+      dispatch(setFormProcessesData([]));
+      dispatch(clearSubmissionError("submission"));
+      dispatch(
+        getFormProcesses(bundleId, (err, data) => {
+          if (err) { 
+            dispatch(setFormFailureErrorData("form", err));
+            dispatch(setBundleLoading(false));
+          } else {
+            executeRule({},data.id)
+            .then((res) => {
+              dispatch(setBundleSelectedForms(res.data));
+             })
+            .catch((err) => {
+             dispatch(setFormFailureErrorData("form", err));
+            })
+            .finally(() => {
+              dispatch(setBundleLoading(false));
+            });
+          }
+        })
+      );
+      return()=>{
+        dispatch(resetBundleData());
+        };
+    },[bundleId, dispatch]);
+
+
   useEffect(() => {
     setTimeout(() => {
       setNotified(true);
@@ -70,13 +103,6 @@ const BundleSubmit = () => {
   }, []);
 
 
-  useEffect(() => {
-    if (isDraftCreated) {
-      setDraftSaved(true);
-    }
-  }, [isDraftCreated]);
-
-  
   useEffect(() => {
     if (bundleId && !error) setIsValidResource(true);
     return () => setIsValidResource(false);
@@ -88,13 +114,19 @@ const BundleSubmit = () => {
     if (
       DRAFT_ENABLED &&
       isValidResource &&
-      isAuthenticated &&
+      isAuthenticated && 
       bundleData.status === "active"
     ) {
       let payload = getDraftReqFormat(bundleId, draftSubmission?.data);
       dispatch(draftCreateMethod(payload, setIsDraftCreated));
     }
   }, [bundleId, isValidResource, bundleData.status]);
+  
+  useEffect(() => {
+    if (isDraftCreated) {
+      setDraftSaved(true);
+    }
+  }, [isDraftCreated]);
   /**
    * Compares the current form data and last saved data
    * Draft is updated only if the form is updated from the last saved form data.
@@ -117,10 +149,6 @@ const BundleSubmit = () => {
             }
           })
         );
-      }
-      //show success toaster - no datachange, but still draft is createdgit
-      else {
-        toast.success("Submission saved to draft.");
       }
     }
   };
@@ -149,34 +177,6 @@ const BundleSubmit = () => {
 
 
 
-    useEffect(()=>{
-    dispatch(setBundleLoading(true));
-    dispatch(setBundleSubmissionData({}));
-    dispatch(clearFormError("form"));
-    dispatch(clearSubmissionError("submission"));
-    dispatch(
-      getFormProcesses(bundleId, (err, data) => {
-        if (err) { 
-          dispatch(setFormFailureErrorData("form", err));
-          dispatch(setBundleLoading(false));
-        } else {
-          executeRule({},data.id)
-          .then((res) => {
-            dispatch(setBundleSelectedForms(res.data));
-           })
-          .catch((err) => {
-           dispatch(setFormFailureErrorData("form", err));
-          })
-          .finally(() => {
-            dispatch(setBundleLoading(false));
-          });
-        }
-      })
-    );
-    return()=>{
-      dispatch(setBundleSelectedForms([]));
-      };
-  },[bundleId, dispatch]);
 
 
 
@@ -189,31 +189,48 @@ const BundleSubmit = () => {
   };
 
   const onSubmit = (submissionData, bundleId) =>{
-    formioPostSubmission(submissionData, bundleId, true)
-        .then((res) => { 
-          setPoll(false);
-          exitType.current = "SUBMIT";
-          const origin = `${window.location.origin}${redirectUrl}`;
-          const data = getProcessReq({_id: bundleData.formId}, res.data._id, origin);
-          data.data = res.data?.data;
-          let isDraftCreated = draftId ? true : false;
-          const applicationCreateAPI = selectApplicationCreateAPI(
-            isAuthenticated,
-            isDraftCreated,
-            DRAFT_ENABLED
-          );
-          dispatch(applicationCreateAPI(data, draftId ? draftId : null,(err)=>{ 
-            if(err){
-              toast.error("Application not created");
-            }else{
-              toast.success("Submission Saved.");
-            }
-            if(isAuthenticated){
-              dispatch(push(`${redirectUrl}${isDesigner ? 'bundle' : 'form'}`));
-            }
-            dispatch(setBundleSubmitLoading(false));
-          }));
-         
+    const callBack = (err,response) => { 
+      if(err){
+        const ErrorDetails = {
+          modalOpen: true,
+          message: "Submission cannot be done.",
+        };
+        toast.error("Submission cannot be done.");
+        dispatch(setFormSubmissionError(ErrorDetails));
+        dispatch(setBundleSubmitLoading(false));
+        return;
+      }
+      setPoll(false);
+      exitType.current = "SUBMIT";
+      const origin = `${window.location.origin}${redirectUrl}`;
+      const data = getProcessReq({_id: bundleData.formId}, response._id, origin);
+      data.data = response?.data;
+      let isDraftCreated = draftId ? true : false;
+      const applicationCreateAPI = selectApplicationCreateAPI(
+        isAuthenticated,
+        isDraftCreated,
+        DRAFT_ENABLED
+      );
+      dispatch(applicationCreateAPI(data, draftId ? draftId : null,(err)=>{ 
+        if(err){
+          toast.error("Application not created");
+        }else{
+          toast.success("Submission Saved.");
+        }
+        if(isAuthenticated){
+          dispatch(push(`${redirectUrl}${isDesigner ? 'bundle' : 'form'}`));
+        }
+        dispatch(setBundleSubmitLoading(false));
+      }));
+
+    };
+
+    if (CUSTOM_SUBMISSION_URL && CUSTOM_SUBMISSION_ENABLE) {
+      postCustomSubmission(submissionData, bundleId, false, callBack);
+    }else{
+      formioPostSubmission(submissionData, bundleId, true)
+        .then((res)=>{
+          callBack(null,res.data);
         })
         .catch(() => {
           const ErrorDetails = {
@@ -224,6 +241,9 @@ const BundleSubmit = () => {
           dispatch(setFormSubmissionError(ErrorDetails));
           dispatch(setBundleSubmitLoading(false));
         });
+    }
+  
+    
         
   };
 

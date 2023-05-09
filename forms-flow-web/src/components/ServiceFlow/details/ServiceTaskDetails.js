@@ -44,6 +44,7 @@ import {
 import { getCustomSubmission } from "../../../apiManager/services/FormServices";
 import { getFormioRoleIds } from "../../../apiManager/services/userservices";
 import { setBundleSubmissionData } from "../../../actions/bundleActions";
+import { BUNDLED_FORM } from "../../../constants/applicationConstants";
 
 const ServiceFlowTaskDetails = React.memo(() => {
   const { t } = useTranslation();
@@ -112,18 +113,24 @@ const ServiceFlowTaskDetails = React.memo(() => {
       const { formId, submissionId } = getFormIdSubmissionIdFromURL(formUrl);
       Formio.clearCache();
       dispatch(resetFormData("form"));
+      const isBundle = taskDetail?.formType === BUNDLED_FORM;
+      if(isBundle){
+        dispatch(setBundleSubmissionData({}));
+      }
+      const isBundleSubmissionSaveCallBack = (err,res)=>{
+        if(isBundle){
+         dispatch(setBundleSubmissionData({data:res.data}));
+         dispatch(setBPMTaskDetailLoader(false));
+        }
+       };
       function fetchForm() {
         dispatch(
           getForm("form", formId, (err) => {
             if (!err) {
               if (CUSTOM_SUBMISSION_URL && CUSTOM_SUBMISSION_ENABLE) {
-                dispatch(getCustomSubmission(submissionId, formId));
+                dispatch(getCustomSubmission(submissionId, formId,isBundleSubmissionSaveCallBack));
               } else {
-                dispatch(getSubmission("submission", submissionId, formId,(_,res)=>{
-                 if(taskDetail?.formType === "bundle"){
-                  dispatch(setBundleSubmissionData({data:res.data}));
-                 }
-                }));
+                dispatch(getSubmission("submission", submissionId, formId,isBundleSubmissionSaveCallBack));
               } 
               dispatch(setFormSubmissionLoading(false));
             } else {
@@ -261,10 +268,10 @@ const ServiceFlowTaskDetails = React.memo(() => {
         <LoadingOverlay active={isTaskUpdating} spinner text={t("Loading...")}>
           <TaskHeader />
           <Tabs defaultActiveKey="form" id="service-task-details" mountOnEnter>
-            <Tab eventKey="form" title={t(task?.formType === "bundle" ? "Forms" : "Form")}>
+            <Tab eventKey="form" title={t(task?.formType === BUNDLED_FORM ? "Forms" : "Form")}>
             
               {
-                  task?.formType === "bundle" ? (
+                  task?.formType === BUNDLED_FORM ? (
                    <div style={{marginBottom:"100px"}}>
                     {
                        task?.assignee === currentUser ? (

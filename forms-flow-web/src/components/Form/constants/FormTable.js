@@ -20,6 +20,7 @@ import SelectFormForDownload from "../FileUpload/SelectFormForDownload";
 import LoadingOverlay from "react-loading-overlay";
 import { STAFF_DESIGNER } from "../../../constants/constants";
 import { getBundle } from "../../../apiManager/services/bundleServices";
+import { BUNDLED_FORM } from "../../../constants/applicationConstants";
 
 function FormTable() {
   const dispatch = useDispatch();
@@ -303,7 +304,7 @@ function FormTable() {
                             }
                             style={{cursor:'pointer'}}
                           >
-                            {e.formType === "bundle" && (
+                            {e.formType === BUNDLED_FORM && (
                               <i
                                 className={`fa fa-chevron-${
                                   selectedRow === index ? "up" : "down"

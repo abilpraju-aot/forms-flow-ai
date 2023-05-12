@@ -5,11 +5,13 @@ on:
   push:
     branches:
       - develop
+      - feature/form-bundling
       - master
       - release/**
   pull_request:
     branches:
       - develop
+      - feature/form-bundling
       - master
       - release/**
     paths:

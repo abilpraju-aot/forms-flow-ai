@@ -5,10 +5,12 @@ on:
     branches:
       - develop
       - master
+      - feature/form-bundling
       - release/**
   pull_request:
     branches:
       - develop
+      - feature/form-bundling
       - master
       - release/**
     paths:

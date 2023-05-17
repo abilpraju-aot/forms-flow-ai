@@ -19,6 +19,13 @@ export const setApplicationHistoryList = (data) => (dispatch) => {
   });
 };
 
+export const setRequestList = (data) => (dispatch) => {
+  dispatch({
+    type: ACTION_CONSTANTS.LIST_REQUESTS,
+    payload: data,
+  });
+};
+
 export const setUpdateHistoryLoader = (data) => (dispatch) => {
   dispatch({
     type: ACTION_CONSTANTS.IS_HISTORY_LOADING,

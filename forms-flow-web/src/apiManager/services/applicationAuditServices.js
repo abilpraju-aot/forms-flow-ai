@@ -3,6 +3,7 @@ import {
   setApplicationHistoryList,
   serviceActionError,
   setUpdateHistoryLoader,
+  setRequestList,
 } from "../../actions/taskApplicationHistoryActions";
 import { StorageService, RequestService } from "@formsflow/service";
 
@@ -16,7 +17,6 @@ export const fetchApplicationAuditHistoryList = (applicationId, ...rest) => {
       "<application_id>",
       applicationId
     );
-
     RequestService.httpGETRequest(
       apiUrlAppHistory,
       {},
@@ -29,7 +29,13 @@ export const fetchApplicationAuditHistoryList = (applicationId, ...rest) => {
           let data = applications.map((app) => {
             return { ...app };
           });
+          const requests = res.data.requests;
+          let requestData = requests.map((app) => {
+            return { ...app };
+          });
+        
           dispatch(setApplicationHistoryList(data));
+          dispatch(setRequestList(requestData));
           dispatch(setUpdateHistoryLoader(false));
           done(null, res.data);
         } else {

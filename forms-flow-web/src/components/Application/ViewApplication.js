@@ -16,16 +16,21 @@ import History from "./ApplicationHistory";
 import View from "../Form/Item/Submission/Item/View";
 import { getForm, getSubmission } from "react-formio";
 import NotFound from "../NotFound";
-import { Translation,useTranslation } from "react-i18next";
-import { CUSTOM_SUBMISSION_URL,CUSTOM_SUBMISSION_ENABLE, MULTITENANCY_ENABLED } from "../../constants/constants";
+import { Translation, useTranslation } from "react-i18next";
+import {
+  CUSTOM_SUBMISSION_URL,
+  CUSTOM_SUBMISSION_ENABLE,
+  MULTITENANCY_ENABLED,
+} from "../../constants/constants";
 import { fetchAllBpmProcesses } from "../../apiManager/services/processServices";
 import { getCustomSubmission } from "../../apiManager/services/FormServices";
 import { setBundleSubmissionData } from "../../actions/bundleActions";
 import BundleView from "../Bundle/item/submission/View";
+import BundleHistory from "./BundleHistory";
 import { BUNDLED_FORM } from "../../constants/applicationConstants";
 
 const ViewApplication = React.memo(() => {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const { applicationId } = useParams();
   const applicationDetail = useSelector(
     (state) => state.applications.applicationDetail
@@ -48,7 +53,7 @@ const ViewApplication = React.memo(() => {
     dispatch(
       getApplicationById(applicationId, (err, res) => {
         if (!err) {
-          if (res.submissionId && res.formId) { 
+          if (res.submissionId && res.formId) {
             dispatch(getForm("form", res.formId));
             if(CUSTOM_SUBMISSION_URL && CUSTOM_SUBMISSION_ENABLE){
               dispatch(getCustomSubmission(res.submissionId,res.formId,(err,data)=>{
@@ -124,13 +129,16 @@ const ViewApplication = React.memo(() => {
           {
             applicationDetail.formType === BUNDLED_FORM ? <BundleView bundleIdProp={applicationDetail.formId} showPrintButton={false}/> : <View page="application-detail" />
           }
-         
         </Tab>
         <Tab
           eventKey="history"
           title={<Translation>{(t) => t("History")}</Translation>}
         >
-          <History page="application-detail" applicationId={applicationId} />
+          {applicationDetail.formType === BUNDLED_FORM ? (
+            <BundleHistory applicationId={applicationId} />
+          ) : (
+            <History page="application-detail" applicationId={applicationId} />
+          )}
         </Tab>
         <Tab
           eventKey="process-diagram"

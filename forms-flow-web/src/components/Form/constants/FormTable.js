@@ -39,9 +39,6 @@ function FormTable() {
   const [pageLimit, setPageLimit] = useState(5);
   const isAscending = sortOrder === "asc" ? true : false;
   const searchText = useSelector((state) => state.bpmForms.searchText);
-  // const [openRows, setOpenRows] = useState([]);
-  // const [show,setShow] = useState(false);
-  // const [expand,setExpand] = useState(false);
   const [search, setSearch] = useState(searchText || "");
   const [bundleData, setBundleData] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -70,7 +67,6 @@ function FormTable() {
   ];
 
   const updateSort = (updatedSort) => {
-    // dispatch(setBpmFormLoading(false));
     dispatch(setBPMFormListSort(updatedSort));
     dispatch(setBPMFormListPage(1));
   };

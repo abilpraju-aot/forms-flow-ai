@@ -44,6 +44,7 @@ import {
 import { getCustomSubmission } from "../../../apiManager/services/FormServices";
 import { getFormioRoleIds } from "../../../apiManager/services/userservices";
 import { setBundleSubmissionData } from "../../../actions/bundleActions";
+import BundleHistory from "../../Application/BundleHistory";
 import { BUNDLED_FORM } from "../../../constants/applicationConstants";
 
 const ServiceFlowTaskDetails = React.memo(() => {
@@ -109,7 +110,7 @@ const ServiceFlowTaskDetails = React.memo(() => {
   }, [task?.processInstanceId]);
 
   const getFormSubmissionData = useCallback(
-    (formUrl,taskDetail) => {
+    (formUrl, taskDetail) => {
       const { formId, submissionId } = getFormIdSubmissionIdFromURL(formUrl);
       Formio.clearCache();
       dispatch(resetFormData("form"));
@@ -159,14 +160,14 @@ const ServiceFlowTaskDetails = React.memo(() => {
 
   useEffect(() => {
     if (task?.formUrl) {
-      getFormSubmissionData(task?.formUrl,task);
+      getFormSubmissionData(task?.formUrl, task);
     }
   }, [task?.formUrl, dispatch, getFormSubmissionData]);
 
   useEffect(() => {
     if (task?.formUrl && taskFormSubmissionReload) {
       dispatch(setFormSubmissionLoading(false));
-      getFormSubmissionData(task?.formUrl,task);
+      getFormSubmissionData(task?.formUrl, task);
       dispatch(reloadTaskFormSubmission(false));
     }
   }, [
@@ -190,17 +191,16 @@ const ServiceFlowTaskDetails = React.memo(() => {
         getBPMTaskDetail(task.id, (err, taskDetail) => {
           if (!err) {
             dispatch(setFormSubmissionLoading(true));
-            getFormSubmissionData(taskDetail?.formUrl,taskDetail);
+            getFormSubmissionData(taskDetail?.formUrl, taskDetail);
           }
         })
       ); // Refresh the Task Selected
       dispatch(getBPMGroups(task.id));
       dispatch(fetchServiceTaskList(selectedFilter.id, firstResult, reqData)); //Refreshes the Tasks
-      
     }
   };
 
-  const onCustomEventCallBack = (customEvent) => { 
+  const onCustomEventCallBack = (customEvent) => {
     switch (customEvent.type) {
       case CUSTOM_EVENT_TYPE.RELOAD_TASKS:
         reloadTasks();
@@ -216,7 +216,7 @@ const ServiceFlowTaskDetails = React.memo(() => {
     }
   };
 
-  const onFormSubmitCallback = (actionType = "") => { 
+  const onFormSubmitCallback = (actionType = "") => {
     if (bpmTaskId) {
       dispatch(setBPMTaskDetailLoader(true));
       const { formId, submissionId } = getFormIdSubmissionIdFromURL(
@@ -289,35 +289,33 @@ const ServiceFlowTaskDetails = React.memo(() => {
                     }
                    </div>
                   ) : (
-                    <LoadingOverlay
-                    active={task?.assignee !== currentUser}
-                    styles={{
-                      overlay: (base) => ({
-                        ...base,
-                        background: "rgba(0, 0, 0, 0.2)",
-                        cursor: "not-allowed !important",
-                      }),
-                    }}
-                  >
-                    {
-                      task?.assignee === currentUser ? (
-                        <FormEdit
-                          onFormSubmit={onFormSubmitCallback}
-                          onCustomEvent={onCustomEventCallBack}
-                        />
-                      ) : (
-                        <FormView showPrintButton={false} />
-                      )
-                    }
-                    </LoadingOverlay>
-                  )
-                }
-                 
-            
-          
+                <LoadingOverlay
+                  active={task?.assignee !== currentUser}
+                  styles={{
+                    overlay: (base) => ({
+                      ...base,
+                      background: "rgba(0, 0, 0, 0.2)",
+                      cursor: "not-allowed !important",
+                    }),
+                  }}
+                >
+                  {task?.assignee === currentUser ? (
+                    <FormEdit
+                      onFormSubmit={onFormSubmitCallback}
+                      onCustomEvent={onCustomEventCallBack}
+                    />
+                  ) : (
+                    <FormView showPrintButton={false} />
+                  )}
+                </LoadingOverlay>
+              )}
             </Tab>
             <Tab eventKey="history" title={t("History")}>
-              <History applicationId={task?.applicationId} />
+              {task?.formType === "bundle" ? (
+                <BundleHistory applicationId={task?.applicationId} />
+              ) : (
+                <History applicationId={task?.applicationId} />
+              )}
             </Tab>
             <Tab eventKey="diagram" title={t("Diagram")}>
               <div>

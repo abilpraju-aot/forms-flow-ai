@@ -33,11 +33,11 @@ function ApplicationTimeline({ applicationHistory }) {
               {postiveStatus.includes(
                 e.applicationStatus || e.requestStatus
               ) ? (
-                <i className="fa fa-check"></i>
+                <i className="fa fa-check text-success"></i>
               ) : negativeStatus.includes(
                   e.applicationStatus || e.requestStatus
                 ) ? (
-                <i className="fa fa-times"></i>
+                <i className="fa fa-times text-danger"></i>
               ) : (
                 ""
               )}

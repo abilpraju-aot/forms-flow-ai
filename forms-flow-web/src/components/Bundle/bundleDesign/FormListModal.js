@@ -199,7 +199,7 @@ const FormListModal = React.memo(
     };
 
     useEffect(()=>{
-      if(!search.trim()){
+      if(!search?.trim()){
         dispatch(setBundleFormSearch(""));
       }
     },[search]);

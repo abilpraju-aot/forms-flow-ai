@@ -82,7 +82,7 @@ function FormTable() {
   }, [searchText]);
 
   useEffect(() => {
-    if (!search.trim()) {
+    if (!search?.trim()) {
       dispatch(setBpmFormSearch(""));
     }
   }, [search]);

@@ -7,7 +7,7 @@ import {
   setBundleSubmitLoading,
 } from "../../../../actions/bundleActions";
 import {
-//  setFormFailureErrorData,
+  //  setFormFailureErrorData,
   setFormSubmissionError,
 } from "../../../../actions/formActions";
 import { getFormProcesses } from "../../../../apiManager/services/processServices";
@@ -36,8 +36,13 @@ import {
   getProcessDataReq,
 } from "../../../../constants/applicationConstants";
 import { getUserRolePermission } from "../../../../helper/user";
- 
-const Edit = ({ bundleIdProp, onBundleSubmit, submissionIdProp, onCustomEvent }) => {
+
+const Edit = ({
+  bundleIdProp,
+  onBundleSubmit,
+  submissionIdProp,
+  onCustomEvent,
+}) => {
   const { bundleId, submissionId } = useParams();
   const dispatch = useDispatch();
   const bundleData = useSelector((state) => state.process.formProcessList);
@@ -51,9 +56,7 @@ const Edit = ({ bundleIdProp, onBundleSubmit, submissionIdProp, onCustomEvent })
   const applicationDetails = useSelector(
     (state) => state.applications.applicationDetail
   );
-  const userRoles = useSelector(
-    (state) => state.user?.roles
-  );
+  const userRoles = useSelector((state) => state.user?.roles);
   const formSubmissionError = useSelector(
     (state) => state.formDelete.formSubmissionError
   );
@@ -105,7 +108,6 @@ const Edit = ({ bundleIdProp, onBundleSubmit, submissionIdProp, onCustomEvent })
     onBundleSubmit,
   ]);
 
-
   const onConfirmSubmissionError = () => {
     const ErrorDetails = {
       modalOpen: false,
@@ -113,8 +115,8 @@ const Edit = ({ bundleIdProp, onBundleSubmit, submissionIdProp, onCustomEvent })
     };
     dispatch(setFormSubmissionError(ErrorDetails));
   };
- 
-  const onSubmit = (bundleSubmission,bundleId,customEventData) => {
+
+  const onSubmit = (bundleSubmission, bundleId, customEventData) => {
     const callBack = (err, submission) => {
       if (!err) {
         if (
@@ -165,10 +167,17 @@ const Edit = ({ bundleIdProp, onBundleSubmit, submissionIdProp, onCustomEvent })
     };
 
     if (CUSTOM_SUBMISSION_URL && CUSTOM_SUBMISSION_ENABLE) {
+      bundleSubmission._id = submissionIdProp || submissionId;
       updateCustomSubmission(
         bundleSubmission,
         onBundleSubmit ? bundleIdProp : bundleId,
-        callBack
+        (err, res) => {
+          if (onCustomEvent && customEventData) {
+            onCustomEvent(customEventData);
+          } else {
+            callBack(null, res);
+          }
+        }
       );
     } else {
       formioUpdateSubmission(
@@ -179,9 +188,9 @@ const Edit = ({ bundleIdProp, onBundleSubmit, submissionIdProp, onCustomEvent })
       )
         .then((res) => {
           dispatch(setBundleSubmissionData({ data: res.data.data }));
-          if(onCustomEvent && customEventData){
+          if (onCustomEvent && customEventData) {
             onCustomEvent(customEventData);
-          }else{
+          } else {
             callBack(null, res.data);
           }
         })
@@ -204,21 +213,21 @@ const Edit = ({ bundleIdProp, onBundleSubmit, submissionIdProp, onCustomEvent })
     );
   }
 
-  if(errors) { 
+  if (errors) {
     return (
       <div className="p-3">
-        <Errors errors={errors} /> 
+        <Errors errors={errors} />
       </div>
     );
   }
 
   return (
     <div className="p-3">
-         <div className="d-flex align-items-center justify-content-between">
+      <div className="d-flex align-items-center justify-content-between">
         <h3 className="task-head px-2 py-2">{bundleData.formName}</h3>
       </div>
       <hr />
-    
+
       <SubmissionError
         modalOpen={formSubmissionError.modalOpen}
         message={formSubmissionError.message}

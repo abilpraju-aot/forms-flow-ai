@@ -12,8 +12,8 @@ export const defaultSortedBy = [
   },
 ];
 
-const linkSubmision = (row, redirectUrl,formType) => {
-  const { formId, submissionId } = row;
+const linkSubmision = (row, redirectUrl) => {
+  const { formId, submissionId,formType } = row;
   const url = getFormUrl(formId, submissionId, redirectUrl,formType);
   return (
     <div title={url} onClick={() => window.open(url, "_blank")}>
@@ -33,7 +33,7 @@ function timeFormatter(cell) {
 }
 
 // History table columns
-export const columns_history = (redirectUrl,formType) => [
+export const columns_history = (redirectUrl) => [
   {
     dataField: "applicationStatus",
     text: <Translation>{(t) => t("Status")}</Translation>,
@@ -53,7 +53,7 @@ export const columns_history = (redirectUrl,formType) => [
   {
     dataField: "formId",
     text: <Translation>{(t) => t("Submissions")}</Translation>,
-    formatter: (cell, row) => linkSubmision(row, redirectUrl,formType),
+    formatter: (cell, row) => linkSubmision(row, redirectUrl),
   },
 ];
 const customTotal = (from, to, size) => (

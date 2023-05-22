@@ -41,9 +41,11 @@ const ViewApplication = React.memo(() => {
   const isApplicationDetailLoading = useSelector(
     (state) => state.applications.isApplicationDetailLoading
   );
+
   const applicationProcess = useSelector(
     (state) => state.applications.applicationProcess
   );
+  const currentForm = useSelector((state) => state.form?.form);
   const tenantKey = useSelector((state) => state.tenants?.tenantId);
   const dispatch = useDispatch();
   const redirectUrl = MULTITENANCY_ENABLED ? `/tenant/${tenantKey}/` : "/";
@@ -55,18 +57,31 @@ const ViewApplication = React.memo(() => {
         if (!err) {
           if (res.submissionId && res.formId) {
             dispatch(getForm("form", res.formId));
-            if(CUSTOM_SUBMISSION_URL && CUSTOM_SUBMISSION_ENABLE){
-              dispatch(getCustomSubmission(res.submissionId,res.formId,(err,data)=>{
-                if(res.formType === BUNDLED_FORM){
-                dispatch(setBundleSubmissionData({data}));
-                }
-              }));
-            }else{
-              dispatch(getSubmission("submission", res.submissionId, res.formId,(err,data)=>{
-                if(res.formType === BUNDLED_FORM){
-                  dispatch(setBundleSubmissionData({data:data.data}));
-                }
-              }));
+            if (CUSTOM_SUBMISSION_URL && CUSTOM_SUBMISSION_ENABLE) {
+              dispatch(
+                getCustomSubmission(
+                  res.submissionId,
+                  res.formId,
+                  (err, data) => {
+                    if (res.formType === BUNDLED_FORM) {
+                      dispatch(setBundleSubmissionData({ data: data.data }));
+                    }
+                  }
+                )
+              );
+            } else {
+              dispatch(
+                getSubmission(
+                  "submission",
+                  res.submissionId,
+                  res.formId,
+                  (err, data) => {
+                    if (res.formType === BUNDLED_FORM) {
+                      dispatch(setBundleSubmissionData({ data: data.data }));
+                    }
+                  }
+                )
+              );
             }
           }
         }
@@ -124,11 +139,25 @@ const ViewApplication = React.memo(() => {
         </Tab>
         <Tab
           eventKey="form"
-          title={<Translation>{(t) => t(applicationDetail.formType === BUNDLED_FORM ? "Forms" : "Form")}</Translation>}
-        >
-          {
-            applicationDetail.formType === BUNDLED_FORM ? <BundleView bundleIdProp={applicationDetail.formId} showPrintButton={false}/> : <View page="application-detail" />
+          title={
+            <Translation>
+              {(t) =>
+                t(
+                  applicationDetail.formType === BUNDLED_FORM ? "Forms" : "Form"
+                )
+              }
+            </Translation>
           }
+        >
+          {applicationDetail.formType === BUNDLED_FORM &&
+          currentForm.isBundle ? (
+            <BundleView
+              bundleIdProp={applicationDetail.formId}
+              showPrintButton={false}
+            />
+          ) : (
+            <View page="application-detail" />
+          )}
         </Tab>
         <Tab
           eventKey="history"

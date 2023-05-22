@@ -75,6 +75,7 @@ const BundleCreate = ({ mode }) => {
       path: _camelCase(bundleName).toLowerCase(),
       name: _camelCase(bundleName),
       type: "form",
+      isBundle:true,
     };
 
     newForm.submissionAccess = submissionAccess;

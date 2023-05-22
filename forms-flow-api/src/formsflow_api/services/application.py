@@ -124,7 +124,11 @@ class ApplicationService:  # pylint: disable=too-many-public-methods
             form_url = data["form_url"]
             web_form_url = data.get("web_form_url", "")
             payload = ApplicationService.get_start_task_payload(
-                application, mapper, form_url, web_form_url, variables
+                application,
+                mapper,
+                form_url,
+                web_form_url,
+                variables,
             )
             ApplicationService.start_task(mapper, payload, token, application)
         return application, HTTPStatus.CREATED

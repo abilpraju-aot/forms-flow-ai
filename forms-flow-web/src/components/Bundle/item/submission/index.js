@@ -35,8 +35,9 @@ const Item = React.memo(() => {
   const dispatch = useDispatch();
   // const showViewSubmissions= useSelector((state) => state.user.showViewSubmissions);
   //const path = props.location.pathname;
-  const applicationId = useSelector(state => 
-    state.bundle?.bundleSubmission?.data?.applicationId || null);
+  const applicationId = useSelector(
+    (state) => state.bundle?.bundleSubmission?.data?.applicationId || null
+  );
   const userRoles = useSelector((state) => {
     return selectRoot("user", state).roles;
   });
@@ -45,25 +46,30 @@ const Item = React.memo(() => {
   );
   const [showSubmissionLoading, setShowSubmissionLoading] = useState(true);
   const [editAllowed, setEditAllowed] = useState(false);
-  const [loading , setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     dispatch(clearSubmissionError("submission"));
     dispatch(resetSubmission("submission"));
     dispatch(clearFormError("form"));
     dispatch(resetBundleData());
     setLoading(true);
+
     if (CUSTOM_SUBMISSION_URL && CUSTOM_SUBMISSION_ENABLE) {
-      dispatch(getCustomSubmission(submissionId, bundleId,(_,res) => {
-        dispatch(setBundleSubmissionData({ data: res.data.data }));
-        setLoading(false);
-      }));
+      dispatch(
+        getCustomSubmission(submissionId, bundleId, (_, res) => {
+          dispatch(setBundleSubmissionData({ data: res.data }));
+          setLoading(false);
+        })
+      );
     } else {
-      formioGetSubmission(bundleId, submissionId).then((res) => {
-        dispatch(setBundleSubmissionData({ data: res.data.data }));
-        setLoading(false);
-      }).catch(()=>{
-        setLoading(false);
-      });
+      formioGetSubmission(bundleId, submissionId)
+        .then((res) => {
+          dispatch(setBundleSubmissionData({ data: res.data.data }));
+          setLoading(false);
+        })
+        .catch(() => {
+          setLoading(false);
+        });
     }
   }, [submissionId, bundleId, dispatch]);
 
@@ -89,7 +95,6 @@ const Item = React.memo(() => {
     if (editAllowed && applicationStatus) setShowSubmissionLoading(false);
   }, [applicationStatus, editAllowed]);
 
-  
   return (
     <div>
       <Switch>

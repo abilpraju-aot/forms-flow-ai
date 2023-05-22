@@ -32,4 +32,5 @@ class ApplicationHistorySchema(Schema):
     request_status = fields.Str(data_key="requestStatus")
     request_type = fields.Str(data_key="requestType")
     is_request = fields.Boolean(data_key="isRequest")
+    form_type = fields.Str(data_key="formType", dump_only=True)
     # count = fields.Int()

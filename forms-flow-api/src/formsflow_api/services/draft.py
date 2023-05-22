@@ -163,7 +163,11 @@ class DraftService:
                 task_variables, data.get("data")
             )
         payload = ApplicationService.get_start_task_payload(
-            application, mapper, data["form_url"], data["web_form_url"], variables
+            application,
+            mapper,
+            data["form_url"],
+            data["web_form_url"],
+            variables,
         )
         ApplicationService.start_task(mapper, payload, token, application)
         return application

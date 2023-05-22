@@ -40,4 +40,6 @@ public class VariableConstants {
 
     public static final String FORM_TYPE = "formType";
 
+    public static final String BUNDLE_FORM_URL = "bundleUrl";
+
 }

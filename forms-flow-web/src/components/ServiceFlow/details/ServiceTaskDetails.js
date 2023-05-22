@@ -41,7 +41,7 @@ import {
   CUSTOM_SUBMISSION_ENABLE,
   MULTITENANCY_ENABLED,
 } from "../../../constants/constants";
-import { getCustomSubmission } from "../../../apiManager/services/FormServices";
+import {  getCustomSubmission } from "../../../apiManager/services/FormServices";
 import { getFormioRoleIds } from "../../../apiManager/services/userservices";
 import { setBundleSubmissionData } from "../../../actions/bundleActions";
 import BundleHistory from "../../Application/BundleHistory";
@@ -53,6 +53,7 @@ const ServiceFlowTaskDetails = React.memo(() => {
   const bpmTaskId = useSelector((state) => state.bpmTasks.taskId);
   const task = useSelector((state) => state.bpmTasks.taskDetail);
   const processList = useSelector((state) => state.bpmTasks.processList);
+  const currentForm = useSelector((state) => state.form?.form || {} );
   const isTaskLoading = useSelector(
     (state) => state.bpmTasks.isTaskDetailLoading
   );
@@ -74,7 +75,7 @@ const ServiceFlowTaskDetails = React.memo(() => {
   const [processInstanceId, setProcessInstanceId] = useState("");
   const tenantKey = useSelector((state) => state.tenants?.tenantId);
   const redirectUrl = MULTITENANCY_ENABLED ? `/tenant/${tenantKey}/` : "/";
-
+ 
   useEffect(() => {
     if (taskId) {
       dispatch(setSelectedTaskID(taskId));
@@ -118,20 +119,25 @@ const ServiceFlowTaskDetails = React.memo(() => {
       if(isBundle){
         dispatch(setBundleSubmissionData({}));
       }
-      const isBundleSubmissionSaveCallBack = (err,res)=>{
-        if(isBundle){
+      const isBundleSubmissionSaveCallBack = (err,res,formResult)=>{
+        if(isBundle && formResult.isBundle){
          dispatch(setBundleSubmissionData({data:res.data}));
-         dispatch(setBPMTaskDetailLoader(false));
         }
+        dispatch(setBPMTaskDetailLoader(false));
        };
       function fetchForm() {
         dispatch(
-          getForm("form", formId, (err) => {
+          getForm("form", formId, (err,formResult) => {
             if (!err) {
               if (CUSTOM_SUBMISSION_URL && CUSTOM_SUBMISSION_ENABLE) {
-                dispatch(getCustomSubmission(submissionId, formId,isBundleSubmissionSaveCallBack));
+                dispatch(getCustomSubmission(submissionId, formId,(err,res)=>{
+                  isBundleSubmissionSaveCallBack(err,res,formResult);
+                }));
               } else {
-                dispatch(getSubmission("submission", submissionId, formId,isBundleSubmissionSaveCallBack));
+                dispatch(getSubmission("submission", submissionId, formId,(err,res)=>{
+                  isBundleSubmissionSaveCallBack(err,res,formResult);
+
+                }));
               } 
               dispatch(setFormSubmissionLoading(false));
             } else {
@@ -271,7 +277,7 @@ const ServiceFlowTaskDetails = React.memo(() => {
             <Tab eventKey="form" title={t(task?.formType === BUNDLED_FORM ? "Forms" : "Form")}>
             
               {
-                  task?.formType === BUNDLED_FORM ? (
+                  task?.formType === BUNDLED_FORM && currentForm.isBundle ? (
                    <div style={{marginBottom:"100px"}}>
                     {
                        task?.assignee === currentUser ? (

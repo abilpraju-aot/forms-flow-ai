@@ -3,11 +3,12 @@ from __future__ import annotations
 
 from typing import List
 
-from sqlalchemy import CheckConstraint
+from sqlalchemy import CheckConstraint, and_
 
 from formsflow_api.models.audit_mixin import ApplicationAuditDateTimeMixin
 from formsflow_api.models.base_model import BaseModel
 from formsflow_api.models.db import db
+from formsflow_api.models.form_process_mapper import FormProcessMapper
 
 
 class ApplicationHistory(ApplicationAuditDateTimeMixin, BaseModel, db.Model):
@@ -64,6 +65,14 @@ class ApplicationHistory(ApplicationAuditDateTimeMixin, BaseModel, db.Model):
         """Fetch application history."""
         return (
             cls.query.filter(cls.application_id == application_id)
+            .outerjoin(
+                FormProcessMapper,
+                and_(
+                    FormProcessMapper.form_id == cls.form_id,
+                    FormProcessMapper.form_type == "bundle",
+                ),
+            )
             .order_by(cls.created)
+            .add_columns(FormProcessMapper.form_type, *cls.__table__.columns)
             .all()
         )

@@ -49,7 +49,6 @@ const bpmTasks = (state = initialState, action) => {
     case ACTION_CONSTANTS.BPM_LIST_TASKS:
       return { ...state, tasksList: action.payload };
     case ACTION_CONSTANTS.BPM_PROCESS_LIST:
-      console.log("action payload",action.payload);
       return { ...state, processList: action.payload };
     case ACTION_CONSTANTS.BPM_USER_LIST:
       return { ...state, userList: action.payload };

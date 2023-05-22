@@ -150,10 +150,45 @@ const FormListModal = React.memo(
         );
         setSelectedForms((prev) =>
           prev.filter((item) => item.parentFormId !== form.parentFormId)
+            .map((form, index) => ({
+              ...form,
+              formOrder: index + 1
+            }))
         );
       }
     };
 
+    const handleSelectAllForms = (selectAllForms) => {
+      if (selectAllForms) {
+        const filterForms = forms.filter((i) => !seletedFormIds.includes(i.parentFormId));
+        setSelectedFormIds((prevSelectedFormIds) => [
+          ...prevSelectedFormIds,
+          ...filterForms.map((form) => form.parentFormId)
+        ]);
+        setSelectedForms((prevSelectedForms) => [
+          ...prevSelectedForms,
+          ...filterForms.map((form, index) => ({
+            ...form,
+            rules:[],
+            formOrder: prevSelectedForms.length + index + 1
+          }))
+        ]);
+
+      } else {
+        const formsToRemoveIds = forms.map((form) => form.parentFormId);
+        setSelectedFormIds((prevSelectedFormIds) => {
+          return prevSelectedFormIds.filter((id) => !formsToRemoveIds.includes(id));
+        });
+        setSelectedForms((prevSelectedForms) => {
+          return prevSelectedForms
+            .filter((form) => !formsToRemoveIds.includes(form.parentFormId))
+            .map((form, index) => ({
+              ...form,
+              formOrder: index + 1
+            }));
+        });
+      }
+    };
     const handleSearch = () => {
       dispatch(setBundleFormSearch(search));
       dispatch(setBundleFormListPage(1));
@@ -216,9 +251,19 @@ const FormListModal = React.memo(
                     <TableContainer style={{ border: "1px solid #dbdbdb" }}>
                       <Table aria-label="simple table">
                         <TableHead>
-                          <TableRow>
-                            <StyledTableCell></StyledTableCell>
-                            <StyledTableCell className="sort-cell" style={{ display: 'flex', gap: '1rem' }}>
+                          <TableRow >
+                            <StyledTableCell>
+                                <Checkbox  style={{ marginLeft: '-9px' }}
+                                checked={forms.every((form) =>
+                                  seletedFormIds.includes(form.parentFormId))}
+                                onChange={(e) => {
+                                  handleSelectAllForms(e.target.checked);
+                                }}
+                                inputProps={{
+                                  "aria-label": "primary checkbox",
+                                }}
+                              /></StyledTableCell>
+                            <StyledTableCell className="sort-cell" style={{ gap: '1rem' }}>
                             <>Form Name</>
                               <>   
                               <i

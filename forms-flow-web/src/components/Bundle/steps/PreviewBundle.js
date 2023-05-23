@@ -65,7 +65,7 @@ const PreviewBundle = ({ handleNext, handleBack, activeStep, isLastStep }) => {
   return (
     <div>
       <div className="d-flex align-items-center flex-wrap justify-content-between my-4 bg-light p-3">
-        <h3>
+        <h3 className="text-truncate col-10">
           <i className="fa fa-folder-o mr-2" aria-hidden="true"></i>
           {bundleData.formName}
         </h3>
@@ -89,7 +89,7 @@ const PreviewBundle = ({ handleNext, handleBack, activeStep, isLastStep }) => {
       </div>
 
       {forms.length ? (
-        <div className="border py-2">
+        <div className="border py-2 text-truncate">
           <Stepper activeStep={formStep} nonLinear alternativeLabel>
             {forms?.map((form) => (
               <Step key={form.id}>
@@ -103,7 +103,7 @@ const PreviewBundle = ({ handleNext, handleBack, activeStep, isLastStep }) => {
             ) : (
               <div>
                 <Errors errors={error} />
-                <h3 className="px-3 py-2">{form.title}</h3>
+                <h3 className="px-3 py-2 text-truncate">{form.title}</h3>
                 <div className="px-3 py-2">
                   <Form form={form} options={{ readOnly: true, viewAsHtml: true }} />
                 </div>

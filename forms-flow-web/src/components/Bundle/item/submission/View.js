@@ -67,7 +67,7 @@ const BundleView = ({ bundleIdProp , showPrintButton = false}) => {
   return (
     <>
       <div className="d-flex align-items-center justify-content-between">
-        <h3 className="task-head px-2 py-2">{bundleData.formName}</h3>
+        <h3 className="task-head px-2 py-2 text-truncate">{bundleData.formName}</h3>
         {showPrintButton && <div className="btn-right d-flex flex-row px-4"><DownloadPdfButton /></div>}
       </div>
       <hr />

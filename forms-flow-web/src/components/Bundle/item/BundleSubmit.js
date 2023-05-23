@@ -264,8 +264,8 @@ const BundleSubmit = () => {
           </Link>
         ) : null}
 
-        <h3 className="ml-3">
-          <span className="">
+        <h3 className="ml-3 text-truncate">
+          <span>
             <i className="fa fa-folder-o" aria-hidden="true"></i> Bundle/
           </span>
           {bundleData.formName}

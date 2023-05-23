@@ -76,7 +76,7 @@ const PreviewAndConfirm = React.memo(
                   <span className="font-weight-bolder mr-2">
                     {t("Bundle Name")} :
                   </span>
-                  <span>{bundleData.formName}</span>
+                  <h4 className="text-truncate">{bundleData.formName}</h4>
                 </div>
                 <div>
                   <span className="font-weight-bolder mr-2">{"Total Forms"} :</span>

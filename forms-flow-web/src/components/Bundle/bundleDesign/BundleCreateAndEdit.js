@@ -207,7 +207,7 @@ const BundleCreate = ({ mode }) => {
     <div>
       <Errors errors={errors} />
       <div className="d-flex align-items-center flex-wrap justify-content-between my-4 bg-light p-3">
-        <h3>{setBundleTitle()}</h3>
+        <h3 className="text-truncate col-10">{setBundleTitle()}</h3>
         <div>
           {mode && mode !== BUNDLE_CREATE_ROUTE ? (
             <button

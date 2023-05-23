@@ -215,7 +215,7 @@ const BundleSubmissionComponent = ({ readOnly, onSubmit ,onChange}) => {
             <div className="px-3">
               <div>
                 <Errors errors={error} />
-                <h3 className="px-3 py-2">{form.title}</h3>
+                <h3 className="px-3 py-2 text-truncate">{form.title}</h3>
                 <div className="px-3 py-2">
                   <Form
                     form={form}

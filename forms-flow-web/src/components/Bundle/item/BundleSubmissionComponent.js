@@ -100,7 +100,7 @@ const BundleSubmissionComponent = ({ readOnly, onSubmit ,onChange}) => {
     }
 
     handleSubmisionData();
-    if (formRef.current.formio.checkValidity()) {
+    if (formRef.current.checkValidity()) {
       setValidationErroIndex(null);
       setValidationError(false);
       dispatch(setBundleSubmitLoading(true));
@@ -160,7 +160,7 @@ const BundleSubmissionComponent = ({ readOnly, onSubmit ,onChange}) => {
 
   const handleSubmit = async () => {
     handleSubmisionData();
-    if (formRef.current.formio.checkValidity()) {
+    if (formRef.current.checkValidity()) {
       dispatch(setBundleSubmitLoading(true));
       setValidationErroIndex(null);
       setValidationError(false);
@@ -226,7 +226,9 @@ const BundleSubmissionComponent = ({ readOnly, onSubmit ,onChange}) => {
                     }}
                     onCustomEvent={onCustomEvent}
 
-                    ref={formRef}
+                    formReady={(e)=>{
+                      formRef.current = e;
+                    }}
                     submission={bundleSubmission}
                     onChange={(e) => { 
                       onChangeFunction(e);

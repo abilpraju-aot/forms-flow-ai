@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - 5.2.0-alpha
+      - feature/form-bundling
     paths:
       - "forms-flow-web/**"
 defaults:

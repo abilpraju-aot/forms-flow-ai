@@ -1,22 +1,14 @@
 import React from "react";
 import { Typography } from "@material-ui/core";
-import moment from "moment";
 import { MULTITENANCY_ENABLED } from "../../constants/constants";
 import { useSelector } from "react-redux";
+import { getLocalDateTime } from "../../apiManager/services/formatterService";
 
 function ApplicationTimeline({ applicationHistory }) {
   const tenantKey = useSelector((state) => state.tenants?.tenantId);
   const formName = useSelector((state) => state.form.form.title);
   const redirectUrl = MULTITENANCY_ENABLED ? `/tenant/${tenantKey}/` : "/";
-  function formatDate(dateString) {
-    let dateObj = new Date(dateString);
-    return moment(dateObj).format("DD/MM/YYYY");
-  }
 
-  function formatTime(dateString) {
-    let dateObj = new Date(dateString);
-    return moment(dateObj).format("h:mm:ssa");
-  }
 
   const ptag = {
     margin: "0",
@@ -64,10 +56,8 @@ function ApplicationTimeline({ applicationHistory }) {
                 <Typography className="" style={ptag}>
                   {" "}
                   <span style={{ fontWeight: "bold" }}>
-                    {formatDate(e.created)}
+                    {getLocalDateTime(e.created)}
                   </span>
-                  <br></br>
-                  {formatTime(e.created)}
                 </Typography>
               </div>
               <div style={{ flex: 1 , paddingBottom: "20px"}}>

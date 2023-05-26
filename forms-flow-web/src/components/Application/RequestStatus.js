@@ -6,8 +6,9 @@ import ApplicationTimeline from "./ApplicationTimeline";
 function RequestStatus({ requests }) {
   const [requestItems, setRequestItems] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
-
-
+  const [requestStatusItems] = requests;
+  const requestStatus =
+    requestStatusItems.items[requestStatusItems.items.length - 1].requestStatus || "";
   const arrow = {
     paddingInline: "120px",
   };
@@ -24,23 +25,23 @@ function RequestStatus({ requests }) {
     setSelectedRow(index === selectedRow ? null : index);
     setRequestItems(items);
   };
-const timeLine = ()=>{
-  return(
-    <tr>
-    <td
-      colSpan={6}
-      style={{
-        padding: "35px",
-        boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.3)",
-      }}
-    >
-      <div style={{ display: "flex" }}>
-        <ApplicationTimeline applicationHistory={requestItems} />
-      </div>
-    </td>
-  </tr>
-  );
-};
+  const timeLine = () => {
+    return (
+      <tr>
+        <td
+          colSpan={6}
+          style={{
+            padding: "35px",
+            boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.3)",
+          }}
+        >
+          <div style={{ display: "flex" }}>
+            <ApplicationTimeline applicationHistory={requestItems} />
+          </div>
+        </td>
+      </tr>
+    );
+  };
 
   return (
     <table className="table table-striped bt-0">
@@ -59,23 +60,24 @@ const timeLine = ()=>{
         {requests?.map((e, index) => {
           return (
             <>
-                        <tr key={index}>
-              <th scope="row">{e?.requestType}</th>
-              <Button style={Statusbutton}>completed</Button>
-              <td style={arrow}>
-                <i
-                  className={`fa fa-chevron-${
-                    selectedRow === index ? "up" : "down"
-                  }`}
-                  onClick={() => handleRowExpansion(e?.items, index)}
-                ></i>
-              </td>
-            </tr>
-            {selectedRow === index && <>{timeLine()}</>}
+              <tr key={index}>
+                <th scope="row">{e?.requestType}</th>
+                <Button style={Statusbutton}>
+                  {requestStatus}
+                </Button>
+                <td style={arrow}>
+                  <i
+                    className={`fa fa-chevron-${
+                      selectedRow === index ? "up" : "down"
+                    }`}
+                    onClick={() => handleRowExpansion(e?.items, index)}
+                  ></i>
+                </td>
+              </tr>
+              {selectedRow === index && <>{timeLine()}</>}
             </>
           );
         })}
-
       </tbody>
     </table>
   );

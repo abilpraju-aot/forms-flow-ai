@@ -27,13 +27,13 @@ const Item = React.memo(() => {
   //const path = props.location.pathname;
   const applicationId = useSelector(
     (state) =>
-      selectRoot("submission", state)?.submission?.data?.applicationId || null
+      selectRoot("submission", state)?.submission?.data?.applicationId || state.formDelete.customSubmission?.data?.applicationId || null
   );
   const userRoles = useSelector((state) => {
     return selectRoot("user", state).roles;
   });
   const applicationStatus = useSelector(
-    (state) => state.applications.applicationDetail?.applicationStatus || ""
+    (state) => state.applications.applicationDetail?.applicationStatus || state.formDelete.customSubmission?.data?.applicationStatus || ""
   );
   const [showSubmissionLoading, setShowSubmissionLoading] = useState(true);
   const [editAllowed, setEditAllowed] = useState(false);

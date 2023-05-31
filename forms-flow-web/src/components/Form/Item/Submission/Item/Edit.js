@@ -60,10 +60,11 @@ const Edit = React.memo((props) => {
   const userRoles = useSelector((state) => {
     return selectRoot("user", state).roles;
   });
+
   const applicationDetail = useSelector(
     (state) => state.applications.applicationDetail
   );
-
+   console.log("applicationdetail",applicationDetail);
   const isFormSubmissionLoading = useSelector(
     (state) => state.formDelete.isFormSubmissionLoading
   );
@@ -187,11 +188,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     ) => {
       dispatch(setFormSubmissionLoading(true));
       const callBack = (err, submission) => {
+        console.log("daaaaaaaaaaaaa",submission.data);
         if (!err) {
           if (
             UPDATE_EVENT_STATUS.includes(applicationDetail.applicationStatus)
           ) {
-            const data = getProcessDataReq(applicationDetail,submission.data);
+            const data = getProcessDataReq(applicationDetail,submission);
+            //console.log("daaaaaaaaaaaaa",submission);
             dispatch(
               updateApplicationEvent(applicationDetail.id, data, () => {
                 dispatch(resetSubmissions("submission"));

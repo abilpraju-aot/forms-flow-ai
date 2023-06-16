@@ -43,7 +43,7 @@ const SaveNext = React.memo(
         >
           {t("Back")}
         </Buttons>
-        <Buttons variant="primary" onClick={handleChanges}>
+        <Buttons variant="primary workflow-next last-save-preview" onClick={handleChanges}>
           {isLastStep ? t("Save") : t("Next")}
         </Buttons>
         <Modal show={show} onHide={handleClose}>

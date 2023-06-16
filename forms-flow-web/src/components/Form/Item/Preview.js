@@ -183,7 +183,7 @@ const Preview = ({handleNext, hideComponents, activeStep}) => {
           <Button
             variant="contained"
             onClick={handleNext}
-            className="ml-3 btn btn-primary  "
+            className="ml-3 btn btn-primary btn-next-edit"
           >
             {
               (activeStep === 1,

@@ -201,7 +201,7 @@ const Create = React.memo(() => {
         <h2>
           <Translation>{(t) => t("Create Form")}</Translation>
         </h2>
-        <button className="btn btn-primary" disabled={formSubmitted} onClick={() => saveFormData()}>
+        <button  className="btn btn-primary createbtnsave" disabled={formSubmitted} onClick={() => saveFormData()}>
           {saveText}
         </button>
 

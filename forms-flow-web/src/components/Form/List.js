@@ -34,7 +34,7 @@ import {
   setFormSearchLoading,
   setFormUploadList,
   updateFormUploadCounter,
-  formUploadFailureCount
+  formUploadFailureCount,
 } from "../../actions/checkListActions";
 import FileModal from "./FileUpload/fileUploadModal";
 import { useTranslation, Translation } from "react-i18next";
@@ -56,6 +56,8 @@ import filterFactory from "react-bootstrap-table2-filter";
 import overlayFactory from "react-bootstrap-table2-overlay";
 import { SpinnerSVG } from "../../containers/SpinnerSVG";
 import { getFormattedForm, INACTIVE } from "./constants/formListConstants";
+import { ProductFruits } from "react-product-fruits";
+
 const List = React.memo((props) => {
   const { t } = useTranslation();
   const [showFormUploadModal, setShowFormUploadModal] = useState(false);
@@ -87,7 +89,6 @@ const List = React.memo((props) => {
 
   const formType = useSelector((state) => state.bpmForms.formType);
 
-
   const isDesigner = userRoles.includes(STAFF_DESIGNER);
   const bpmForms = useSelector((state) => state.bpmForms);
   const pageNo = useSelector((state) => state.bpmForms.page);
@@ -97,7 +98,14 @@ const List = React.memo((props) => {
   const sortOrder = useSelector((state) => state.bpmForms.sortOrder);
   const formCheckList = useSelector((state) => state.formCheckList.formList);
   const columns = isDesigner ? designerColums(t) : userColumns(t);
-
+  const userDetails = JSON.stringify(
+    useSelector((state) => state.user.userDetail?.preferred_username || [])
+  );
+  const userName = {
+    username: userDetails,
+    firstname: userDetails,
+  };
+  
   const formAccess = useSelector((state) => state.user?.formAccess || []);
 
   const submissionAccess = useSelector(
@@ -146,7 +154,7 @@ const List = React.memo((props) => {
     sortBy,
     sortOrder,
     searchText,
-    formType
+    formType,
   ]);
 
   const formCheck = (formCheckList) => {
@@ -158,12 +166,14 @@ const List = React.memo((props) => {
     let response = "";
 
     if (result.resource) {
-      response = `${result.resource} ${result.resource == 1 ? t("Resource") : t("Resources")
-        }`;
+      response = `${result.resource} ${
+        result.resource == 1 ? t("Resource") : t("Resources")
+      }`;
     }
     if (result.form) {
-      response += `${result.resource ? " ," : ""} ${result.form} ${result.form == 1 ? t("Form") : t("Forms")
-        }`;
+      response += `${result.resource ? " ," : ""} ${result.form} ${
+        result.form == 1 ? t("Form") : t("Forms")
+      }`;
     }
     return toast.success(`${response} ${t("Downloaded Successfully")}`);
   };
@@ -198,7 +208,7 @@ const List = React.memo((props) => {
   };
   const handleSearch = () => {
     if (searchText != searchInputBox.current.value) {
-      searchInputBox.current.value === '' ? dispatch(setBPMFormLimit(5)) : '';
+      searchInputBox.current.value === "" ? dispatch(setBPMFormLimit(5)) : "";
       dispatch(setBPMFormListPage(1));
       dispatch(setBpmFormSearch(searchInputBox.current.value));
     }
@@ -211,7 +221,7 @@ const List = React.memo((props) => {
   };
   const onClear = () => {
     setSearchTextInput("");
-    dispatch(setBpmFormSearch(''));
+    dispatch(setBpmFormSearch(""));
     dispatch(setBPMFormLimit(5));
     setShowClearButton(false);
   };
@@ -296,85 +306,97 @@ const List = React.memo((props) => {
                   dispatch(
                     fetchFormByAlias(newFormData.path, async (err, formObj) => {
                       if (!err) {
-
                         dispatch(
                           // eslint-disable-next-line no-unused-vars
                           getFormProcesses(formObj._id, (err, mapperData) => {
                             // just update form
                             if (mapperData) {
                               dispatch(
-                                getApplicationCount(mapperData.id, (error, applicationCount) => {
-                                  if (!error) {
-                                    newFormData._id = formObj._id;
-                                    newFormData.access = formObj.access;
-                                    newFormData.submissionAccess = formObj.submissionAccess;
-                                    newFormData.componentChanged =
-                                      (!_isEquial(newFormData.components, formObj.components) ||
-                                        newFormData.display !== formObj.display ||
-                                        newFormData.type !== formObj.type
-                                      );
-                                    newFormData.parentFormId = mapperData.parentFormId;
-                                    formUpdate(newFormData._id, newFormData)
-                                      .then((formupdated) => {
-                                        const updatedForm = formupdated.data;
-                                        const data = {
-                                          anonymous:
-                                            mapperData.anonymous === null
-                                              ? false
-                                              : mapperData.anonymous,
-                                          formName: updatedForm.title,
-                                          formType: updatedForm.type,
-                                          parentFormId: mapperData.parentFormId,
-                                          status: mapperData.status
-                                            ? mapperData.status
-                                            : INACTIVE,
-                                          taskVariable: mapperData.taskVariable
-                                            ? mapperData.taskVariable
-                                            : [],
-                                          id: mapperData.id,
-                                          formId: updatedForm._id,
-                                          formTypeChanged:
-                                            mapperData.formType !==
-                                            updatedForm.type,
-                                          titleChanged:
-                                            mapperData.formName !==
-                                            updatedForm.title,
-                                        };
+                                getApplicationCount(
+                                  mapperData.id,
+                                  (error, applicationCount) => {
+                                    if (!error) {
+                                      newFormData._id = formObj._id;
+                                      newFormData.access = formObj.access;
+                                      newFormData.submissionAccess =
+                                        formObj.submissionAccess;
+                                      newFormData.componentChanged =
+                                        !_isEquial(
+                                          newFormData.components,
+                                          formObj.components
+                                        ) ||
+                                        newFormData.display !==
+                                          formObj.display ||
+                                        newFormData.type !== formObj.type;
+                                      newFormData.parentFormId =
+                                        mapperData.parentFormId;
+                                      formUpdate(newFormData._id, newFormData)
+                                        .then((formupdated) => {
+                                          const updatedForm = formupdated.data;
+                                          const data = {
+                                            anonymous:
+                                              mapperData.anonymous === null
+                                                ? false
+                                                : mapperData.anonymous,
+                                            formName: updatedForm.title,
+                                            formType: updatedForm.type,
+                                            parentFormId:
+                                              mapperData.parentFormId,
+                                            status: mapperData.status
+                                              ? mapperData.status
+                                              : INACTIVE,
+                                            taskVariable:
+                                              mapperData.taskVariable
+                                                ? mapperData.taskVariable
+                                                : [],
+                                            id: mapperData.id,
+                                            formId: updatedForm._id,
+                                            formTypeChanged:
+                                              mapperData.formType !==
+                                              updatedForm.type,
+                                            titleChanged:
+                                              mapperData.formName !==
+                                              updatedForm.title,
+                                          };
 
-                                        const isMapperNeed = isMapperSaveNeeded(
-                                          mapperData,
-                                          updatedForm,
-                                          applicationCount
-                                        );
+                                          const isMapperNeed =
+                                            isMapperSaveNeeded(
+                                              mapperData,
+                                              updatedForm,
+                                              applicationCount
+                                            );
 
-                                        if (isMapperNeed === "new") {
-                                          data["version"] = String(
-                                            +mapperData.version + 1
-                                          );
+                                          if (isMapperNeed === "new") {
+                                            data["version"] = String(
+                                              +mapperData.version + 1
+                                            );
+                                            dispatch(
+                                              saveFormProcessMapperPost(data)
+                                            );
+                                          } else if (
+                                            isMapperNeed === "update"
+                                          ) {
+                                            dispatch(
+                                              saveFormProcessMapperPut(data)
+                                            );
+                                          }
+                                          fetchForms();
+                                          dispatch(updateFormUploadCounter());
+                                          resolve();
+                                        })
+                                        .catch((err) => {
                                           dispatch(
-                                            saveFormProcessMapperPost(data)
+                                            setFormFailureErrorData("form", err)
                                           );
-                                        } else if (isMapperNeed === "update") {
-                                          dispatch(
-                                            saveFormProcessMapperPut(data)
-                                          );
-                                        }
-                                        fetchForms();
-                                        dispatch(updateFormUploadCounter());
-                                        resolve();
-                                      })
-                                      .catch((err) => {
-                                        dispatch(
-                                          setFormFailureErrorData("form", err)
-                                        );
-                                        dispatch(formUploadFailureCount());
-                                        reject();
-                                      });
-                                  } else {
-                                    reject();
-                                    toast.error("Error in application count");
+                                          dispatch(formUploadFailureCount());
+                                          reject();
+                                        });
+                                    } else {
+                                      reject();
+                                      toast.error("Error in application count");
+                                    }
                                   }
-                                })
+                                )
                               );
                             } else if (!mapperData) {
                               newFormData.componentChanged = true;
@@ -390,7 +412,7 @@ const List = React.memo((props) => {
                                   resolve();
                                 })
                                 .catch((err) => {
-                                  err ? dispatch(formUploadFailureCount()) : '';
+                                  err ? dispatch(formUploadFailureCount()) : "";
                                   reject();
                                 });
                             } else {
@@ -411,7 +433,7 @@ const List = React.memo((props) => {
         );
       }
     } catch (err) {
-      err ? dispatch(formUploadFailureCount()) : '';
+      err ? dispatch(formUploadFailureCount()) : "";
     }
   };
 
@@ -420,12 +442,13 @@ const List = React.memo((props) => {
       let formToUpload;
       if ("forms" in fileContent) {
         formToUpload = fileContent;
-      }
-      else {
-        ['_id', 'type', 'created', 'modified', 'machineName'].forEach(e => delete fileContent[e]);
+      } else {
+        ["_id", "type", "created", "modified", "machineName"].forEach(
+          (e) => delete fileContent[e]
+        );
         const newArray = [];
         newArray.push(fileContent);
-        formToUpload = { "forms": newArray };
+        formToUpload = { forms: newArray };
       }
       if (formToUpload) {
         dispatch(setFormUploadList(formToUpload?.forms || []));
@@ -466,7 +489,7 @@ const List = React.memo((props) => {
         onClose={() => setShowFormUploadModal(false)}
       />
       {(forms.isActive || designerFormLoading || isBPMFormListLoading) &&
-        !searchFormLoading ? (
+      !searchFormLoading ? (
         <div data-testid="Form-list-component-loader">
           <Loading />
         </div>
@@ -477,19 +500,20 @@ const List = React.memo((props) => {
             message={
               formProcessData.id && applicationCount ? (
                 applicationCountResponse ? (
-                  
-                 <div>
-                 {applicationCount}  
-                 {
-                    applicationCount > 1
-                      ? <span>{`${t(" Applications are submitted against")} `}</span> 
-                      : <span>{`${t(" Application is submitted against")} `}</span> 
-                  } 
-                  <span style={{ fontWeight: "bold" }}>{props.formName}</span>
-                  .
-                   {t("Are you sure you wish to delete the form?")}
-                  
-                   </div>
+                  <div>
+                    {applicationCount}
+                    {applicationCount > 1 ? (
+                      <span>{`${t(
+                        " Applications are submitted against"
+                      )} `}</span>
+                    ) : (
+                      <span>{`${t(
+                        " Application is submitted against"
+                      )} `}</span>
+                    )}
+                    <span style={{ fontWeight: "bold" }}>{props.formName}</span>
+                    .{t("Are you sure you wish to delete the form?")}
+                  </div>
                 ) : (
                   <div>
                     {`${t("Are you sure you wish to delete the form ")}`}
@@ -500,8 +524,7 @@ const List = React.memo((props) => {
               ) : (
                 <div>
                   {`${t("Are you sure you wish to delete the form ")} `}
-                  <span style={{ fontWeight: "bold" }}>{props.formName}</span>
-                  ?
+                  <span style={{ fontWeight: "bold" }}>{props.formName}</span>?
                 </div>
               )
             }
@@ -534,6 +557,13 @@ const List = React.memo((props) => {
             </div>
             <div className="flex-item-right">
               {isDesigner && (
+                <ProductFruits
+                  workspaceCode="A9d0zekvhFNZxFgD"
+                  language="en"
+                  user={userName}
+                />
+              )}
+              {isDesigner && (
                 <Link
                   to={`${redirectUrl}formflow/create`}
                   className="btn btn-primary btn-left btn-sm"
@@ -554,7 +584,7 @@ const List = React.memo((props) => {
                   </Button>
                   <input
                     type="file"
-                    value=''
+                    value=""
                     className="d-none"
                     multiple={false}
                     accept=".json,application/json"
@@ -582,7 +612,10 @@ const List = React.memo((props) => {
           <section className="custom-grid grid-forms">
             <Errors errors={errors} />
             <div className="  row mt-2 mx-2">
-              <div className="col" style={{ marginLeft: "5px", marginTop: "-18px" }}>
+              <div
+                className="col"
+                style={{ marginLeft: "5px", marginTop: "-18px" }}
+              >
                 <div className="input-group">
                   <span
                     className="sort-span"
@@ -596,18 +629,20 @@ const List = React.memo((props) => {
                       className="fa fa-long-arrow-up fa-lg mt-2 fa-lg-hover"
                       title={t("Sort by form name")}
                       style={{
-                        opacity: `${sortOrder === "asc" || sortOrder === "title" ? 1 : 0.5
-                          }`,
+                        opacity: `${
+                          sortOrder === "asc" || sortOrder === "title" ? 1 : 0.5
+                        }`,
                       }}
                     />
                     <i
                       className="fa fa-long-arrow-down fa-lg mt-2 ml-1 fa-lg-hover"
                       title={t("Sort by form name")}
                       style={{
-                        opacity: `${sortOrder === "desc" || sortOrder === "-title"
-                          ? 1
-                          : 0.5
-                          }`,
+                        opacity: `${
+                          sortOrder === "desc" || sortOrder === "-title"
+                            ? 1
+                            : 0.5
+                        }`,
                       }}
                     />
                   </span>
@@ -639,12 +674,12 @@ const List = React.memo((props) => {
                   )}
                   <button
                     type="button"
-                    className='btn btn-outline-primary ml-2'
+                    className="btn btn-outline-primary ml-2"
                     name="search-button"
                     title="Click to search"
                     onClick={() => handleSearch()}
                   >
-                    <i className="fa fa-search" ></i>
+                    <i className="fa fa-search"></i>
                   </button>
                   {isDesigner ? (
                     <select
@@ -666,7 +701,6 @@ const List = React.memo((props) => {
                         {t("Resource")}
                       </option>
                     </select>
-
                   ) : (
                     ""
                   )}
@@ -696,22 +730,29 @@ const List = React.memo((props) => {
                         Loading={isLoading}
                         filter={filterFactory()}
                         filterPosition={"top"}
-                        pagination={formData.length ? paginationFactory(
-                          getoptions(pageNo, limit, totalForms)
-                        ) : false}
+                        pagination={
+                          formData.length
+                            ? paginationFactory(
+                                getoptions(pageNo, limit, totalForms)
+                              )
+                            : false
+                        }
                         onTableChange={handlePageChange}
                         {...props.baseProps}
-                        noDataIndication={() => !seachFormLoading ? noDataFound() : ""}
+                        noDataIndication={() =>
+                          !seachFormLoading ? noDataFound() : ""
+                        }
                         overlay={overlayFactory({
                           spinner: <SpinnerSVG />,
                           styles: {
                             overlay: (base) => ({
                               ...base,
                               background: "rgba(255, 255, 255)",
-                              height: `${limit > 5
-                                ? "100% !important"
-                                : "350px !important"
-                                }`,
+                              height: `${
+                                limit > 5
+                                  ? "100% !important"
+                                  : "350px !important"
+                              }`,
                               top: "65px",
                             }),
                           },
@@ -769,7 +810,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
               );
             } else {
               toast.success(
-                <Translation>{(t) => t("Form deleted successfully")}</Translation>
+                <Translation>
+                  {(t) => t("Form deleted successfully")}
+                </Translation>
               );
               const newFormCheckList = formCheckList.filter(
                 (i) => i.formId !== formId

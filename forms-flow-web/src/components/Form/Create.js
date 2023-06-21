@@ -4,9 +4,7 @@ import _set from "lodash/set";
 import _cloneDeep from "lodash/cloneDeep";
 import _camelCase from "lodash/camelCase";
 import { push } from "connected-react-router";
-import {
-  MULTITENANCY_ENABLED,
-} from "../../constants/constants";
+import { MULTITENANCY_ENABLED } from "../../constants/constants";
 import { addHiddenApplicationComponent } from "../../constants/applicationComponent";
 import { saveFormProcessMapperPost } from "../../apiManager/services/processServices";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +19,11 @@ import {
 import { addTenantkey } from "../../helper/helper";
 import { formCreate } from "../../apiManager/services/FormServices";
 import { Checkbox, FormControlLabel } from "@material-ui/core";
+import {
+  isProductFruitsReady,
+  useProductFruitsApi,
+} from "react-product-fruits";
+
 // reducer from react-formio code
 const reducer = (form, { type, value }) => {
   const formCopy = _cloneDeep(form);
@@ -59,8 +62,31 @@ const Create = React.memo(() => {
   const formAccess = useSelector((state) => state.user?.formAccess || []);
   const roleIds = useSelector((state) => state.user?.roleIds || {});
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const submissionAccess = useSelector((state) => state.user?.submissionAccess || []);
+  const submissionAccess = useSelector(
+    (state) => state.user?.submissionAccess || []
+  );
   const redirectUrl = MULTITENANCY_ENABLED ? `/tenant/${tenantKey}/` : "/";
+  const [mouseOver, setMouseOver] = useState(false);
+
+  useEffect(() => {
+    if (document.getElementById("group-container-basic")) {
+      document
+        .getElementById("group-container-basic")
+        .addEventListener("mouseover", () => {
+          setMouseOver(true);
+        });
+    }
+  }, [isProductFruitsReady]);
+
+  useProductFruitsApi(
+    (api) => {
+      if (mouseOver) {
+        const tourId = api.tours.getTours().id;
+        api.tours.advanceToNextStep(tourId);
+      }
+    },
+    [isProductFruitsReady, mouseOver]
+  );
 
   const { t } = useTranslation();
   useEffect(() => {
@@ -102,14 +128,14 @@ const Create = React.memo(() => {
           <i
             className="fa fa-info-circle text-primary cursor-pointer"
             data-toggle="tooltip"
-            title={`${t("By default, the tenant key would be prefixed to form")}${type}`}
+            title={`${t(
+              "By default, the tenant key would be prefixed to form"
+            )}${type}`}
           ></i>
         </span>
       );
     }
   };
-
-
 
   // setting the form data
   useEffect(() => {
@@ -144,45 +170,46 @@ const Create = React.memo(() => {
         newForm.name = addTenantkey(newForm.name, tenantKey);
       }
     }
-    formCreate(newForm).then((res) => {
-      const form = res.data;
-      const data = {
-        formId: form._id,
-        formName: form.title,
-        formType: form.type,
-        formTypeChanged: true,
-        anonymousChanged: true,
-        parentFormId: form._id,
-        titleChanged: true,
-        formRevisionNumber: "V1", // to do
-        anonymous: formAccess[0]?.roles.includes(roleIds.ANONYMOUS),
-      };
-      dispatch(setFormSuccessData("form", form));
-      dispatch(
-        // eslint-disable-next-line no-unused-vars
-        saveFormProcessMapperPost(data, (err, res) => {
-          if (!err) {
-            toast.success(t("Form Saved"));
-            dispatch(push(`${redirectUrl}formflow/${form._id}/view-edit/`));
-          } else {
-            setFormSubmitted(false);
-            toast.error(t("Error in creating form process mapper"));
-          }
-        })
-      );
-
-    }).catch((err) => {
-      let error;
-      if (err.response?.data) {
-        error = err.response.data;
-      } else {
-        error = err.message;
-      }
-      dispatch(setFormFailureErrorData("form", error));
-
-    }).finally(() => {
-      setFormSubmitted(false);
-    });
+    formCreate(newForm)
+      .then((res) => {
+        const form = res.data;
+        const data = {
+          formId: form._id,
+          formName: form.title,
+          formType: form.type,
+          formTypeChanged: true,
+          anonymousChanged: true,
+          parentFormId: form._id,
+          titleChanged: true,
+          formRevisionNumber: "V1", // to do
+          anonymous: formAccess[0]?.roles.includes(roleIds.ANONYMOUS),
+        };
+        dispatch(setFormSuccessData("form", form));
+        dispatch(
+          // eslint-disable-next-line no-unused-vars
+          saveFormProcessMapperPost(data, (err, res) => {
+            if (!err) {
+              toast.success(t("Form Saved"));
+              dispatch(push(`${redirectUrl}formflow/${form._id}/view-edit/`));
+            } else {
+              setFormSubmitted(false);
+              toast.error(t("Error in creating form process mapper"));
+            }
+          })
+        );
+      })
+      .catch((err) => {
+        let error;
+        if (err.response?.data) {
+          error = err.response.data;
+        } else {
+          error = err.message;
+        }
+        dispatch(setFormFailureErrorData("form", error));
+      })
+      .finally(() => {
+        setFormSubmitted(false);
+      });
   };
 
   // setting the main option details to the formdata
@@ -201,16 +228,20 @@ const Create = React.memo(() => {
         <h2>
           <Translation>{(t) => t("Create Form")}</Translation>
         </h2>
-        <button  className="btn btn-primary createbtnsave" disabled={formSubmitted} onClick={() => saveFormData()}>
+        <button
+          className="btn btn-primary createbtnsave"
+          disabled={formSubmitted}
+          onClick={() => saveFormData()}
+        >
           {saveText}
         </button>
-
       </div>
 
       <Errors errors={errors} />
-      <div className="p-4"
-        style={{ border: "1px solid #c2c0be", borderRadius: "5px" }}>
-
+      <div
+        className="p-4"
+        style={{ border: "1px solid #c2c0be", borderRadius: "5px" }}
+      >
         <div className="row align-item-center">
           <div className="col-lg-4 col-md-4 col-sm-4">
             <div id="form-group-title" className="form-group">
@@ -235,16 +266,18 @@ const Create = React.memo(() => {
                 {addingTenantKeyInformation("name")}
               </label>
               <div className="input-group mb-2">
-                {
-                  MULTITENANCY_ENABLED && tenantKey ? <div className="input-group-prepend">
+                {MULTITENANCY_ENABLED && tenantKey ? (
+                  <div className="input-group-prepend">
                     <div
                       className="input-group-text"
                       style={{ maxWidth: "150px" }}
                     >
                       <span className="text-truncate">{tenantKey}</span>
                     </div>
-                  </div> : ""
-                }
+                  </div>
+                ) : (
+                  ""
+                )}
                 <input
                   type="text"
                   className="form-control"
@@ -309,16 +342,18 @@ const Create = React.memo(() => {
                 {addingTenantKeyInformation("path")}
               </label>
               <div className="input-group mb-2">
-                {
-                  MULTITENANCY_ENABLED && tenantKey ? <div className="input-group-prepend">
+                {MULTITENANCY_ENABLED && tenantKey ? (
+                  <div className="input-group-prepend">
                     <div
                       className="input-group-text"
                       style={{ maxWidth: "150px" }}
                     >
                       <span className="text-truncate">{tenantKey}</span>
                     </div>
-                  </div> : ""
-                }
+                  </div>
+                ) : (
+                  ""
+                )}
                 <input
                   type="text"
                   className="form-control"

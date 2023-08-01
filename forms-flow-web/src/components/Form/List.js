@@ -58,6 +58,7 @@ import overlayFactory from "react-bootstrap-table2-overlay";
 import { SpinnerSVG } from "../../containers/SpinnerSVG";
 import { getFormattedForm, INACTIVE } from "./constants/formListConstants";
 import { addClients, addUsers } from "../../apiManager/services/authorizationService";
+import { ProductFruits } from "react-product-fruits";
 const List = React.memo((props) => {
   const { t } = useTranslation();
   const [showFormUploadModal, setShowFormUploadModal] = useState(false);
@@ -99,7 +100,13 @@ const List = React.memo((props) => {
   const sortOrder = useSelector((state) => state.bpmForms.sortOrder);
   const formCheckList = useSelector((state) => state.formCheckList.formList);
   const columns = isDesigner ? designerColums(t) : userColumns(t);
-
+  const userDetails = JSON.stringify(
+    useSelector((state) => state.user.userDetail?.preferred_username || [])
+  );
+  const userName = {
+    username: userDetails,
+    firstname: userDetails,
+  };
   const formAccess = useSelector((state) => state.user?.formAccess || []);
   // const user =  useSelector(
   //   (state) => state.user.userDetail
@@ -573,6 +580,13 @@ const List = React.memo((props) => {
               </div>
             </div>
             <div className="flex-item-right">
+            {isDesigner && (
+                <ProductFruits
+                  workspaceCode="A9d0zekvhFNZxFgD"
+                  language="en"
+                  user={userName}
+                />
+              )}
               {isDesigner && (
                 <Link
                   to={`${redirectUrl}formflow/create`}

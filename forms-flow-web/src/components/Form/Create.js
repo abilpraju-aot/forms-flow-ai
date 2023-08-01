@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer,useRef } from "react";
 import { FormBuilder, Errors } from "react-formio";
 import _set from "lodash/set";
 import _cloneDeep from "lodash/cloneDeep";
@@ -22,6 +22,10 @@ import { addTenantkey } from "../../helper/helper";
 import { formCreate } from "../../apiManager/services/FormServices";
 import { Checkbox, FormControlLabel } from "@material-ui/core";
 import { addClients, addUsers } from "../../apiManager/services/authorizationService";
+import {
+  isProductFruitsReady,
+  useProductFruitsApi,
+} from "react-product-fruits";
 // reducer from react-formio code
 const reducer = (form, { type, value }) => {
   const formCopy = _cloneDeep(form);
@@ -62,7 +66,37 @@ const Create = React.memo(() => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const submissionAccess = useSelector((state) => state.user?.submissionAccess || []);
   const redirectUrl = MULTITENANCY_ENABLED ? `/tenant/${tenantKey}/` : "/";
+  const [mouseOver, setMouseOver] = useState(false);
+  const refelement = useRef();
+  // useEffect(() => {
+  //   if (document.getElementById("group-container-basic")) {
+  //     document
+  //       .getElementById("group-container-basic")
+  //       .addEventListener("mouseover", () => {
+  //         setMouseOver(true);
+  //       });
+  //   }
+  // }, [isProductFruitsReady]);
+  useEffect(() => {
+    if (refelement && refelement.current) {
+      refelement.current.addEventListener("mouseover", () => {
+          setMouseOver(true);
+        });
+    }
+  }, [isProductFruitsReady,refelement]);
 
+  useProductFruitsApi(
+    (api) => {
+      const tourName = api.tours.getTours()[0].currentCard.name;
+      if(mouseOver && tourName == '4 Drag drop'){
+        const tourId = api.tours.getTours()[0].id;
+         api.tours.advanceToNextStep(tourId);
+      }   
+    },
+    [isProductFruitsReady, mouseOver]
+  );
+
+  
   const { t } = useTranslation();
   useEffect(() => {
     dispatch(clearFormError("form"));
@@ -209,7 +243,7 @@ const Create = React.memo(() => {
         <h2>
           <Translation>{(t) => t("Create Form")}</Translation>
         </h2>
-        <button className="btn btn-primary" disabled={formSubmitted} onClick={() => saveFormData()}>
+        <button className="btn btn-primary createbtnsave" disabled={formSubmitted} onClick={() => saveFormData()}>
           {saveText}
         </button>
 
@@ -363,6 +397,7 @@ const Create = React.memo(() => {
             </div>
           </div>
         </div>
+        <div ref={refelement} >
         <FormBuilder
           form={form}
           onChange={formChange}
@@ -371,6 +406,7 @@ const Create = React.memo(() => {
             i18n: formio_resourceBundles,
           }}
         />
+        </div>
       </div>
     </div>
   );

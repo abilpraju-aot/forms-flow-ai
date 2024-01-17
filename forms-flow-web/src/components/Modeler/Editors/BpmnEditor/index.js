@@ -36,7 +36,8 @@ import {
   BpmnPropertiesProviderModule,
   CamundaPlatformPropertiesProviderModule,
 } from "bpmn-js-properties-panel";
-
+import AsyncPropertiesProviderModule from '../../provider';
+import asyncModdleDescriptors from '../../descriptors/async.json';
 //import CamundaExtensionModule from "camunda-bpmn-moddle/lib";
 import camundaPlatformBehaviors from 'camunda-bpmn-js-behaviors/lib/camunda-platform';
 import camundaModdleDescriptors from "camunda-bpmn-moddle/resources/camunda";
@@ -94,11 +95,13 @@ export default React.memo(
             BpmnPropertiesProviderModule,
             camundaPlatformBehaviors,
             CamundaPlatformPropertiesProviderModule,
+            AsyncPropertiesProviderModule,
             //CamundaExtensionModule,
             lintModule,
           ],
           moddleExtensions: {
             camunda: camundaModdleDescriptors,
+            async: asyncModdleDescriptors
           },
         })
       );

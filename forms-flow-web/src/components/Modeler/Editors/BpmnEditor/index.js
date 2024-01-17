@@ -30,7 +30,7 @@ import {
 import BpmnModeler from "bpmn-js/lib/Modeler";
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
-
+import customModule from "../custom";
 import {
   BpmnPropertiesPanelModule,
   BpmnPropertiesProviderModule,
@@ -40,7 +40,7 @@ import {
 //import CamundaExtensionModule from "camunda-bpmn-moddle/lib";
 import camundaPlatformBehaviors from 'camunda-bpmn-js-behaviors/lib/camunda-platform';
 import camundaModdleDescriptors from "camunda-bpmn-moddle/resources/camunda";
-
+import elmiExtension from "../elmi.json";
 import lintModule from "bpmn-js-bpmnlint";
 import "bpmn-js-bpmnlint/dist/assets/css/bpmn-js-bpmnlint.css";
 import linterConfig from "../../lint-rules/packed-config";
@@ -90,6 +90,7 @@ export default React.memo(
             active: true,
           },
           additionalModules: [
+            customModule,
             BpmnPropertiesPanelModule,
             BpmnPropertiesProviderModule,
             camundaPlatformBehaviors,
@@ -98,6 +99,7 @@ export default React.memo(
             lintModule,
           ],
           moddleExtensions: {
+            elmi: elmiExtension,
             camunda: camundaModdleDescriptors,
           },
         })

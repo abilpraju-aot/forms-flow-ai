@@ -44,6 +44,8 @@ import elmiExtension from "../elmi.json";
 import lintModule from "bpmn-js-bpmnlint";
 import "bpmn-js-bpmnlint/dist/assets/css/bpmn-js-bpmnlint.css";
 import linterConfig from "../../lint-rules/packed-config";
+import magicPropertiesProviderModule from '../../provider/magic';
+import magicModdleDescriptor from '../..//descriptors/magic';
 
 export default React.memo(
   ({ processKey, tenant, isNewDiagram, bpmnXml, mode }) => {
@@ -95,12 +97,14 @@ export default React.memo(
             BpmnPropertiesProviderModule,
             camundaPlatformBehaviors,
             CamundaPlatformPropertiesProviderModule,
+            magicPropertiesProviderModule,
             //CamundaExtensionModule,
             lintModule,
           ],
           moddleExtensions: {
             elmi: elmiExtension,
             camunda: camundaModdleDescriptors,
+            magic: magicModdleDescriptor
           },
         })
       );

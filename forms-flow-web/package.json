@@ -5,7 +5,7 @@
   "main": "single-spa-index.js",
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "start": "craco start",
+    "start": "concurrently \"craco start\" \"node server.js\"",
     "build": "GENERATE_SOURCEMAP=false craco --max_old_space_size=6144 build",
     "winBuild": "set \"GENERATE_SOURCEMAP=false\" && craco build",
     "eject": "react-scripts eject",
@@ -34,6 +34,7 @@
     "@babel/eslint-parser": "^7.23.3",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.1.1",
+    "concurrently": "^8.2.2",
     "eslint": "^8.56.0",
     "msw": "^0.36.0",
     "redux-mock-store": "^1.5.4"
@@ -56,6 +57,7 @@
     "camunda-bpmn-moddle": "^7.0.1",
     "camunda-dmn-moddle": "^1.3.0",
     "connected-react-router": "^6.9.1",
+    "cors": "^2.8.5",
     "craco-plugin-single-spa-app-aot": "^2.0.2",
     "create-react-class": "^15.7.0",
     "crypto-js": "^4.2.0",
@@ -63,6 +65,7 @@
     "dmn-js": "^15.0.0",
     "dmn-js-properties-panel": "^3.2.1",
     "dompurify": "^3.0.8",
+    "express": "^4.17.2",
     "flagged": "^2.0.10",
     "formiojs": "^4.18.0",
     "formsflow-formio-custom-elements": "^1.0.3",

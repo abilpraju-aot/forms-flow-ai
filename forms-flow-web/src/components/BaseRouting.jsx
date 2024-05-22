@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch, Redirect, useLocation } from "react-router-dom";
+import { Route, Switch, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import PublicRoute from "./PublicRoute";
@@ -74,7 +74,7 @@ const BaseRouting = React.memo(
                 />
               </Route>
               <Route path="/404" exact={true} component={NotFound} />
-              <Redirect from="*" to="/404" />
+              {/* <Redirect from="*" to="/404" /> */}
             </Switch>
         </div>
             {isAuth ? <Footer /> : null}

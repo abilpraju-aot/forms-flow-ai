@@ -46,7 +46,7 @@ services:
       - KEYCLOAK_HTTP_PATH=${KEYCLOAK_HTTP_PATH:-/auth}
 
     ports:
-      - "8080:8080"
+      - "7002:8080"
     links:
       - keycloak-db
     networks:

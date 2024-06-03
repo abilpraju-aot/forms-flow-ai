@@ -1,5 +1,3 @@
-"""Common setup and fixtures for the pytest suite used by this service."""
-
 import os
 from unittest.mock import patch, mock_open
 
@@ -18,7 +16,6 @@ from formsflow_api.models import db as _db
 def app():
     """Return a session-wide application configured in TEST mode."""
     _app = create_app("testing")
-
     return _app
 
 
@@ -26,7 +23,6 @@ def app():
 def app_request():
     """Return a session-wide application configured in TEST mode."""
     _app = create_app("testing")
-
     return _app
 
 
@@ -59,10 +55,10 @@ def database(app):  # pylint: disable=redefined-outer-name, invalid-name
     with app.app_context():
         drop_schema_sql = text(
             """DROP SCHEMA public CASCADE;
-                             CREATE SCHEMA public;
-                             GRANT ALL ON SCHEMA public TO postgres;
-                             GRANT ALL ON SCHEMA public TO public;
-                          """
+               CREATE SCHEMA public;
+               GRANT ALL ON SCHEMA public TO postgres;
+               GRANT ALL ON SCHEMA public TO public;
+            """
         )
 
         sess = _db.session()
@@ -80,7 +76,6 @@ def database(app):  # pylint: disable=redefined-outer-name, invalid-name
 def session(app, database):  # pylint: disable=redefined-outer-name, invalid-name
     """Return a function-scoped session."""
     with app.app_context():
-        # TODO, refactor to improve test execution time.
         truncate_all_expr = text(
             """SELECT 'TRUNCATE TABLE ' || table_schema || '.' || table_name || ' RESTART IDENTITY CASCADE;'
             FROM information_schema.tables WHERE table_schema = 'public'; """
@@ -125,7 +120,6 @@ def auto(docker_services, app):
 def docker_compose_files(pytestconfig):
     """Get the docker-compose.yml absolute path."""
     import os
-
     return [
         os.path.join(str(pytestconfig.rootdir), "tests/docker", "docker-compose.yml")
     ]
@@ -155,6 +149,7 @@ def mock_redis_client():
         return_value=mock_redis,
     ) as _mock:  # noqa
         yield mock_redis
+
 
 @pytest.fixture(scope="session", autouse=True)
 def mock_permissions_json():

@@ -1,11 +1,23 @@
 """All constants for project."""
 import os
-
+import json
 from dotenv import find_dotenv, load_dotenv
 
 # this will load all the envars from a .env file located in the project root (api)
 load_dotenv(find_dotenv())
 
+# Load JSON data from a file
+def load_json_data(filepath):
+    with open(filepath, 'r') as json_file:
+        data = json.load(json_file)
+    return data
+
+# Determine the path to the permissions.json file
+current_directory = os.path.dirname(os.path.realpath(__file__))
+file_path = os.path.join(current_directory, 'permissions.json')
+
+# Load the permissions data
+PERMISSIONS = load_json_data(file_path)
 FORMSFLOW_API_CORS_ORIGINS = os.getenv("FORMSFLOW_API_CORS_ORIGINS", "*")
 ALLOW_ALL_ORIGINS = "*"
 CORS_ORIGINS = []

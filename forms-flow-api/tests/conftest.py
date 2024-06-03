@@ -1,7 +1,7 @@
 """Common setup and fixtures for the pytest suite used by this service."""
 
 import os
-from unittest.mock import patch
+from unittest.mock import patch, mock_open
 
 import pytest
 from alembic import command
@@ -155,3 +155,17 @@ def mock_redis_client():
         return_value=mock_redis,
     ) as _mock:  # noqa
         yield mock_redis
+
+@pytest.fixture(scope="session", autouse=True)
+def mock_permissions_json():
+    """Mock permissions.json file access."""
+    mock_data = '''{"permissions": "[
+    {
+        "name": "create_designs",
+        "description": "Create Form, workflow designs",
+        "depends_on": [
+            "view_designs"
+        ]
+    }]"}'''
+    with patch("builtins.open", mock_open(read_data=mock_data)):
+        yield

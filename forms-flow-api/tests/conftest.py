@@ -159,13 +159,14 @@ def mock_redis_client():
 @pytest.fixture(scope="session", autouse=True)
 def mock_permissions_json():
     """Mock permissions.json file access."""
-    mock_data = '''{"permissions": "[
-    {
-        "name": "create_designs",
-        "description": "Create Form, workflow designs",
-        "depends_on": [
-            "view_designs"
-        ]
-    }]"}'''
+    mock_data = '''[
+        {
+            "name": "create_designs",
+            "description": "Create Form, workflow designs",
+            "depends_on": [
+                "view_designs"
+            ]
+        }
+    ]'''
     with patch("builtins.open", mock_open(read_data=mock_data)):
         yield

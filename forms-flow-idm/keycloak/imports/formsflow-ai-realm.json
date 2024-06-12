@@ -474,7 +474,6 @@
               "query-users"
             ],
             "forms-flow-web": [
-              "manage_dashboard_authorizations",
               "manage_roles",
               "manage_integrations",
               "manage_users"

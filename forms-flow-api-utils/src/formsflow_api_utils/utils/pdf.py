@@ -84,7 +84,10 @@ def get_pdf_from_html(path, chromedriver=None, p_options=None, args=None):
     
     user_details_json = json.dumps(user_details)
     driver.execute_script(f"window.localStorage.setItem('UserDetails', '{user_details_json}')")
-
+    local_storage = driver.execute_script("return window.localStorage")
+    print(local_storage)
+    current_app.logger.info(local_storage)
+    
     try:
         if "wait" in args:
             delay = 30  # seconds

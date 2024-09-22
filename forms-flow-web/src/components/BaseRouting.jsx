@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation,Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import PublicRoute from "./PublicRoute";
@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import i18n from "../resourceBundles/i18n";
 import { setLanguage } from "../actions/languageSetAction";
 import { initPubSub } from "../actions/pubSubActions";
-import { push } from "connected-react-router";
+import { push } from "@lagunovsky/redux-react-router";
 import LandingPage from "./MultiTenant";
 
 const BaseRouting = React.memo(
@@ -62,25 +62,32 @@ const BaseRouting = React.memo(
       <div className="container  mt-5">
         <div className="min-container-height ps-md-3">
           <ToastContainer />
-          <Switch>
-            <Route path="/public">
-              <PublicRoute
-                store={store}
-                publish={publish}
-                subscribe={subscribe}
-                getKcInstance={getKcInstance}
-              />
-            </Route>
-            <Route path={BASE_ROUTE}>
-              <PrivateRoute
-                store={store}
-                publish={publish}
-                subscribe={subscribe}
-                getKcInstance={getKcInstance}
-              />
-            </Route>
-            <Route path="/404" exact={true} component={NotFound} />
-          </Switch>
+          <Routes>
+            <Route
+              path="public"
+              element={
+                <PublicRoute
+                  store={store}
+                  publish={publish}
+                  subscribe={subscribe}
+                  getKcInstance={getKcInstance}
+                />
+              }
+            />
+            <Route
+              path={`${BASE_ROUTE}*`}
+              element={
+                <PrivateRoute
+                  store={store}
+                  publish={publish}
+                  subscribe={subscribe}
+                  getKcInstance={getKcInstance}
+                />
+              }
+            />
+            <Route path="/404" element={<NotFound />} />
+            <Route path="*" element={<Navigate to={"/404"} />} />
+          </Routes>
         </div>
         {isAuth ? <Footer /> : null}
       </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { connect, useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
 import NoData from "./nodashboard";
-import { Route, Redirect } from "react-router";
+import { Route, Navigate } from "react-router";
 import {
   fetchDashboardDetails,
   fetchUserDashboards,
@@ -14,7 +14,7 @@ import LoadingOverlay from "react-loading-overlay-ts";
 import Loading from "../../containers/Loading";
 import { useTranslation, Translation } from "react-i18next";
 import { BASE_ROUTE, MULTITENANCY_ENABLED } from "../../constants/constants";
-import { push } from "connected-react-router";
+import { push } from "@lagunovsky/redux-react-router";
 import Head from "../../containers/Head";
 import { runCleanup } from "../../actions/insightActions";
 
@@ -162,7 +162,7 @@ const Insights = React.memo((props) => {
       </div>
 
       <Route path={`${BASE_ROUTE}insights/:notAvailable`}>
-        <Redirect exact to="/404" />
+        <Navigate exact to="/404" />
       </Route>
     </>
   );

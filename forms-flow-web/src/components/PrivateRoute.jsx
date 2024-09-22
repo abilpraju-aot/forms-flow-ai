@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, Suspense, lazy, useMemo, useCallback } from "react";
-import { Route, Switch, Redirect, useParams } from "react-router-dom";
+import { Route, Routes, Navigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   BASE_ROUTE,
@@ -309,7 +309,7 @@ const PrivateRoute = React.memo((props) => {
         <AccessDenied userRoles={userRoles} />
       ) : isAuth ? (
         <Suspense fallback={<Loading />}>
-          <Switch>
+          <Routes>
             {ENABLE_FORMS_MODULE && (
               <FormRoute path={`${BASE_ROUTE}form`} component={Form} />
             )}
@@ -352,14 +352,14 @@ const PrivateRoute = React.memo((props) => {
             <Route exact path={`${redirecUrl}admin`} /> 
             <Route exact path={BASE_ROUTE}>
             {userRoles.length && (
-               <Redirect
+               <Navigate
                  to={BASE_ROUTE_PATH}
                 />
                )}
             </Route>
             <Route path="/404" exact={true} component={NotFound} />
-            <Redirect from="*" to="/404" />
-          </Switch>
+            <Navigate from="*" to="/404" />
+          </Routes>
         </Suspense>
       ) : (
         <Loading />

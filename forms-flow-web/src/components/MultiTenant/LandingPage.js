@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./landingPage.css";
 import { validateTenant } from "../../apiManager/services/tenantServices";
 import { useTranslation } from "react-i18next";
@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 const LandingPage = () => {
   const [username, setUsername] = useState("");
   const [error, setError] = useState(null);
-  const history = useHistory();
+  const history = useNavigate();
   const { t } = useTranslation();
 
   const handleSubmit = (event) => {

@@ -1,4 +1,4 @@
-import { Route, Switch, Redirect, useParams, useLocation } from "react-router-dom";
+import { Route, Routes, Navigate, useParams, useLocation } from "react-router-dom";
 import React, { useEffect } from "react";
 import { Formio, getForm } from "@aot-technologies/formio-react";
 import { useDispatch, useSelector } from "react-redux";
@@ -124,7 +124,7 @@ const Item = React.memo(() => {
         createSubmissions || viewSubmissions ? (
           <Component {...props} />
         ) : (
-          <Redirect exact to={`${redirectUrl}`} />
+          <Navigate exact to={`${redirectUrl}`} />
         )
       }
     />
@@ -136,7 +136,7 @@ const Item = React.memo(() => {
 
   return (
     <div>
-      <Switch>
+      <Routes>
         <Route exact path={`${BASE_ROUTE}form/:formId`} component={View} />
         <SubmissionRoute
           path={`${BASE_ROUTE}form/:formId/submission`}
@@ -146,8 +146,8 @@ const Item = React.memo(() => {
           path={`${BASE_ROUTE}form/:formId/draft`}
           component={Draft}
         />
-        <Redirect exact to="/404" />
-      </Switch>
+        <Navigate exact to="/404" />
+      </Routes>
     </div>
   );
 });

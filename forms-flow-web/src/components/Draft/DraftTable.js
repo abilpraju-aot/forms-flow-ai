@@ -6,7 +6,7 @@ import { HelperServices } from "@formsflow/service";
 import { Translation } from "react-i18next";
 import { Dropdown, DropdownButton } from "react-bootstrap";
 import Pagination from "react-js-pagination";
-import { push } from "connected-react-router";
+import { push } from "@lagunovsky/redux-react-router";
 import {
   setCountPerpage,
   setDraftListActivePage,

@@ -37,7 +37,7 @@ import {
 
 // a descriptor that defines Camunda related DMN 1.1 XML extensions
 import camundaModdleDescriptor from "camunda-dmn-moddle/resources/camunda";
-import { push } from "connected-react-router";
+import { push } from "@lagunovsky/redux-react-router";
 export default React.memo(({ processKey, tenant, isNewDiagram, mode}) => {
   const { t } = useTranslation();
 

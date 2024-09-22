@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import List from "./List";
@@ -41,7 +41,7 @@ export default React.memo(() => {
 
   return (
     <div data-testid="Form-index">
-      <Switch>
+      <Routes>
         <Route exact path={`${BASE_ROUTE}form`} component={List} />
         <CreateFormRoute
           path={`${BASE_ROUTE}formflow/:formId?/:step?`}
@@ -51,7 +51,7 @@ export default React.memo(() => {
           path={`${BASE_ROUTE}form/:formId/`}
           component={Item}
         />
-      </Switch>
+      </Routes>
     </div>
   );
 });

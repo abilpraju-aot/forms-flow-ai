@@ -2,7 +2,7 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import ApplicationCounter from "./ApplicationCounter";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Redirect } from "react-router";
+import { Route, Navigate } from "react-router";
 import StatusChart from "./StatusChart";
 import Modal from "react-bootstrap/Modal";
 import {
@@ -24,13 +24,13 @@ import {
   SetSubmissionStatusCountLoader,
   setMetricsDateChange,
 } from "../../actions/metricsActions";
-import LoadingOverlay from "@ronchalant/react-loading-overlay";
+import LoadingOverlay from "react-loading-overlay-ts";
 import {
   Dropdown, 
   FormControl,
   InputGroup,
 } from "react-bootstrap";
-import { push } from "connected-react-router";
+import { push } from "@lagunovsky/redux-react-router";
 import { MULTITENANCY_ENABLED } from "../../constants/constants";
 import Head from "../../containers/Head";
 const Dashboard = React.memo(() => {
@@ -418,7 +418,7 @@ const Dashboard = React.memo(() => {
 
         <Route path={"/metrics/:notAvailable"}>
           {" "}
-          <Redirect exact to="/404" />
+          <Navigate exact to="/404" />
         </Route>
       </LoadingOverlay>
     </Fragment>

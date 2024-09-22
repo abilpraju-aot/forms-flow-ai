@@ -15,7 +15,7 @@ import {
 } from "../../constants/constants"; 
  
 import Head from "../../containers/Head";
-import { push } from "connected-react-router";
+import { push } from "@lagunovsky/redux-react-router";
  import ApplicationTable from "./ApplicationTable";
 
 export const ApplicationList = React.memo(() => {

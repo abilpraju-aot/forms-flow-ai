@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import Base from "./Main";
@@ -37,7 +37,7 @@ const Processes = () => {
 
   return (
     <div data-testid="Process-index">
-      <Switch>
+      <Routes>
         <Route exact path={`${BASE_ROUTE}processes`} component={Base} />
         <DesignerProcessRoute
           exact
@@ -54,8 +54,8 @@ const Processes = () => {
           path={`${BASE_ROUTE}processes/:type/:processId/edit`}
           component={Edit}
         />
-        <Redirect exact to="/404" />
-      </Switch>
+        <Navigate exact to="/404" />
+      </Routes>
     </div>
   );
 };

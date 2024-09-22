@@ -8,7 +8,7 @@ import {
   selectError,
   Errors,
 } from "@aot-technologies/formio-react";
-import { push } from "connected-react-router";
+import { push } from "@lagunovsky/redux-react-router";
 import Loading from "../../../../../containers/Loading";
 import { setFormSubmissionLoading } from "../../../../../actions/formActions";
 import LoadingOverlay from "react-loading-overlay-ts";

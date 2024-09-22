@@ -21,7 +21,7 @@ import {
 } from "../../apiManager/services/processServices";
 import { selectRoot, selectError, Formio, getForm } from "@aot-technologies/formio-react";
 import { MULTITENANCY_ENABLED } from "../../constants/constants";
-import { push } from "connected-react-router";
+import { push } from "@lagunovsky/redux-react-router";
 import WorkFlow from "./Steps/WorkFlow";
 import PreviewStepper from "./Steps/PreviewStepper";
 import Stepper from "../../containers/Stepper/index.js";

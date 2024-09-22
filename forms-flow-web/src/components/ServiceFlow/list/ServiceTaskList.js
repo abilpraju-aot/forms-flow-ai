@@ -14,7 +14,7 @@ import {
   getFormattedDateAndTime,
 } from "../../../apiManager/services/formatterService";
 import Pagination from "react-js-pagination";
-import { push } from "connected-react-router";
+import { push } from "@lagunovsky/redux-react-router";
 import { MAX_RESULTS } from "../constants/taskConstants";
 import { getFirstResultIndex } from "../../../apiManager/services/taskSearchParamsFormatterService";
 import TaskVariable from "./TaskVariable";

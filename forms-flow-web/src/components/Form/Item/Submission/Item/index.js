@@ -1,4 +1,4 @@
-import { Redirect, Route, Switch, useParams } from "react-router-dom";
+import { Navigate, Route, Routes, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getSubmission, selectRoot } from "@aot-technologies/formio-react";
@@ -100,7 +100,7 @@ const Item = React.memo(() => {
           </li>) : null
         }*/}
       </ul>
-      <Switch>
+      <Routes>
         {!submissionError ? (
           <Route
             exact
@@ -111,7 +111,7 @@ const Item = React.memo(() => {
           errorMessage={t("Bad Request")}
           errorCode={400}
         />}
-        <Redirect
+        <Navigate
           exact
           from={`${BASE_ROUTE}form/:formId/submission/:submissionId/edit/:notavailable`}
           to="/404"
@@ -132,7 +132,7 @@ const Item = React.memo(() => {
           path={`${BASE_ROUTE}form/:formId/submission/:submissionId/:notavailable`}
           component={NotFound}
         />
-      </Switch>
+      </Routes>
     </div>
   );
 });

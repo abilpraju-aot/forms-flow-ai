@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect, useReducer } from "react";
 import { Errors, FormBuilder, Formio } from "@aot-technologies/formio-react";
-import { push } from "connected-react-router";
-import { useHistory } from "react-router-dom";
+import { push } from "@lagunovsky/redux-react-router";
+import { useNavigate } from "react-router-dom";
 import _set from "lodash/set";
 import _cloneDeep from "lodash/cloneDeep";
 import _camelCase from "lodash/camelCase";
@@ -100,7 +100,7 @@ const Edit = React.memo(() => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formDescription, setFormDescription] = useState("");
   const lang = useSelector((state) => state.user.lang);
-  const history = useHistory();
+  const history = useNavigate();
   const { t} = useTranslation();
   const [show, setShow] = useState(false);
   const [currentFormLoading, setCurrentFormLoading] = useState(false);

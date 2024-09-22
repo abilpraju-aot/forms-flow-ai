@@ -12,7 +12,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { MULTITENANCY_ENABLED } from "../../../constants/constants";
 import { setDmnSearchText,setIsPublicDiagram } from "../../../actions/processActions";
-import { push } from "connected-react-router";
+import { push } from "@lagunovsky/redux-react-router";
 
 function DmnTable() {
   const dispatch = useDispatch();

@@ -29,9 +29,9 @@ import {
 import SocketIOService from "../../services/SocketIOService";
 import isEqual from "lodash/isEqual";
 import cloneDeep from "lodash/cloneDeep";
-import { Route, Redirect, Switch } from "react-router-dom";
-import { push, replace } from "connected-react-router";
-import { BASE_ROUTE, MULTITENANCY_ENABLED } from "../../constants/constants";
+import { Route, Navigate, Routes } from "react-router-dom";
+import { push, replace } from "@lagunovsky/redux-react-router";
+import { MULTITENANCY_ENABLED } from "../../constants/constants";
 import TaskHead from "../../containers/TaskHead";
 import TaskSearchBarView from "./list/search/TaskSearchBarView";
 
@@ -287,45 +287,31 @@ export default React.memo(() => {
               </section>
             </div>
             <div className="col-12 pe-0 ps-md-5 col-md-8 col-xl-9  px-2 pe-md-0 py-5 py-md-0 border ">
-              <Switch>
+            <Routes>
                 <Route
-                  path={`${BASE_ROUTE}task/:taskId?`}
-                  component={ServiceFlowTaskDetails}
+                  path={`:taskId?`}
+                  element={<ServiceFlowTaskDetails/>}
                 ></Route>
-                <Route path={`${BASE_ROUTE}task/:taskId/:notAvailable`}>
-                  {" "}
-                  <Redirect exact to="/404" />
-                </Route>
-              </Switch>
+                <Route path={`*`} element={<Navigate to={`/404`} />} />
+              </Routes>
             </div>
           </div>
         </>
       ) : (
-        <Switch>
-          <Route
-            exact
-            path={`${BASE_ROUTE}task`}
-            render={() => (
-              <>
-                <ServiceTaskListView
-                  expandedTasks={expandedTasks}
-                  setExpandedTasks={setExpandedTasks}
-                />
-              </>
-            )}
-          ></Route>
-          <Route
-            path={`${BASE_ROUTE}task/:taskId`}
-            render={() => (
-              <>
-                <ServiceTaskListViewDetails />
-              </>
-            )}
-          ></Route>
-          <Route path={`${BASE_ROUTE}task/:taskId/:notAvailable`}>
-            <Redirect exact to="/404" />
-          </Route>
-        </Switch>
+        <Routes>
+        <Route 
+          path={`task`}
+          element={<ServiceTaskListView
+            expandedTasks={expandedTasks}
+            setExpandedTasks={setExpandedTasks}
+          />}
+        />
+        <Route
+          path={`:taskId`}
+          element={ <ServiceTaskListViewDetails />}
+        />
+        <Route path={`*`} element={<Navigate to={`/404`} />} />
+      </Routes>
       )}
     </div>
   );

@@ -20,7 +20,7 @@ import {
   setApplicationSortOrder,
   setCountPerpage,
 } from "../../actions/applicationActions";
-import { push } from "connected-react-router";
+import { push } from "@lagunovsky/redux-react-router";
 import LoadingOverlay from "react-loading-overlay-ts";
 
 const ApplicationTable = () => {

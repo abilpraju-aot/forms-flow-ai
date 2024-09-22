@@ -3,7 +3,7 @@ import { FormBuilder, Errors } from "@aot-technologies/formio-react";
 import _set from "lodash/set";
 import _cloneDeep from "lodash/cloneDeep";
 import _camelCase from "lodash/camelCase";
-import { push } from "connected-react-router";
+import { push } from "@lagunovsky/redux-react-router";
 import "../Form/Create.scss";
 
 import {

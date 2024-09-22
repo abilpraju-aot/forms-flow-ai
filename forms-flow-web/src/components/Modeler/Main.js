@@ -4,7 +4,7 @@ import BpmnTable from "./constants/bpmnTable";
 import DmnTable from "./constants/dmnTable";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { push } from "connected-react-router";
+import { push } from "@lagunovsky/redux-react-router";
 import { extractDataFromDiagram } from "./helpers/helper";
 import {
   setWorkflowAssociation,

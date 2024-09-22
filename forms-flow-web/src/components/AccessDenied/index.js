@@ -4,13 +4,13 @@ import { ReactComponent as AccessDeniedIcon } from "./AccessDenied.svg";
 import './accessDenied.scss';
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { MULTITENANCY_ENABLED } from "../../constants/constants";
 
 
 const AccessDenied = ({ userRoles }) => {
   const { t } = useTranslation();
-  const history = useHistory();
+  const history = useNavigate();
   const tenantKey = useSelector((state) => state.tenants?.tenantId);
   const redirectUrl = MULTITENANCY_ENABLED ? `/tenant/${tenantKey}/` : "/";
 

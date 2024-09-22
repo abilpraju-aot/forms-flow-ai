@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import "./../ServiceFlow.scss";
 import { getFormattedDateAndTime } from "../../../apiManager/services/formatterService";
 import Pagination from "react-js-pagination";
-import { push } from "connected-react-router";
+import { push } from "@lagunovsky/redux-react-router";
 
 import { MULTITENANCY_ENABLED } from "../../../constants/constants";
 import TaskHeaderListView from "../details/TaskHeaderListView";

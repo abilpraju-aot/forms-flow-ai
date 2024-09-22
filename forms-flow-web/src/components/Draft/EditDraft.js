@@ -8,7 +8,7 @@ import { getForm, getSubmission } from "@aot-technologies/formio-react";
 import { MULTITENANCY_ENABLED } from "../../constants/constants";
 import { getDraftById } from "../../apiManager/services/draftService";
 import Edit from "./Edit";
-import { push } from "connected-react-router";
+import { push } from "@lagunovsky/redux-react-router";
 
 const EditDraft = React.memo(() => {
   const { draftId } = useParams();

@@ -1,4 +1,4 @@
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import React from "react";
 
 // import List from './List'
@@ -12,9 +12,9 @@ const Form = React.memo(() => {
 
   return (
     <div>
-      <Switch>
+      <Routes>
         <Route exact path={`${BASE_ROUTE}form/:formId/submission`}>
-          <Redirect exact to="/404" />
+          <Navigate exact to="/404" />
         </Route>
         {viewSubmissions && (
           <Route
@@ -22,7 +22,7 @@ const Form = React.memo(() => {
             component={Item}
           />
         )}
-      </Switch>
+      </Routes>
     </div>
   );
 });

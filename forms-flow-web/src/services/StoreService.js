@@ -1,6 +1,6 @@
 import thunk from "redux-thunk";
 import { createBrowserHistory } from "history";
-import { routerMiddleware } from "connected-react-router";
+import { createRouterMiddleware  } from "@lagunovsky/redux-react-router";
 import { applyMiddleware, compose, createStore } from "redux";
 import logger from "redux-logger";
 
@@ -18,7 +18,7 @@ function configureStore(preloadedState) {
     enhancers.push(applyMiddleware(logger));
   }
 
-  const middleware = [thunk, routerMiddleware(history)];
+  const middleware = [thunk, createRouterMiddleware(history)];
 
   const composedEnhancers = compose(
     applyMiddleware(...middleware),

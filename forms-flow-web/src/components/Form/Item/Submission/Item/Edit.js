@@ -8,7 +8,7 @@ import {
   selectError,
   Errors,
 } from "@aot-technologies/formio-react";
-import { push } from "connected-react-router";
+import { push } from "@lagunovsky/redux-react-router";
 import { RESOURCE_BUNDLES_DATA } from "../../../../../resourceBundles/i18n";
 import Loading from "../../../../../containers/Loading";
 

@@ -1,7 +1,6 @@
 import { combineReducers } from "redux";
-import { connectRouter } from "connected-react-router";
+import { ReduxRouter  } from "@lagunovsky/redux-react-router";
 import { form, forms, submission, submissions } from "@aot-technologies/formio-react";
-
 import user from "./userDetailReducer";
 import taskAppHistory from "./taskAppHistoryReducer";
 import formDelete from "./formReducer";
@@ -43,7 +42,7 @@ const createRootReducer = (history) =>
     }),
     submission: submission({ name: "submission" }),
     submissions: submissions({ name: "submissions" }),
-    router: connectRouter(history),
+    router: ReduxRouter(history),
     metrics,
     process,
     menu,

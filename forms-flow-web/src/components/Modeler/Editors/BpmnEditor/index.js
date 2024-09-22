@@ -9,7 +9,7 @@ import { createXML } from "../../helpers/deploy";
 import { MULTITENANCY_ENABLED, PUBLIC_WORKFLOW_ENABLED } from "../../../../constants/constants";
 import { deployBpmnDiagram } from "../../../../apiManager/services/bpmServices";
 import Loading from "../../../../containers/Loading";
-import { push } from "connected-react-router";
+import { push } from "@lagunovsky/redux-react-router";
 import {
   SUCCESS_MSG,
   ERROR_MSG,
@@ -36,8 +36,9 @@ import {
   CamundaPlatformPropertiesProviderModule,
 } from "bpmn-js-properties-panel";
 
-import CamundaExtensionModule from "camunda-bpmn-moddle/lib";
-import camundaModdleDescriptors from "camunda-bpmn-moddle/resources/camunda";
+//import CamundaExtensionModule from "camunda-bpmn-moddle/lib";
+import camundaPlatformBehaviors from 'camunda-bpmn-js-behaviors/lib/camunda-platform';
+//import camundaModdleDescriptors from "camunda-bpmn-moddle/resources/camunda";
 
 import lintModule from "bpmn-js-bpmnlint";
 import "bpmn-js-bpmnlint/dist/assets/css/bpmn-js-bpmnlint.css";
@@ -91,12 +92,12 @@ export default React.memo(
             BpmnPropertiesPanelModule,
             BpmnPropertiesProviderModule,
             CamundaPlatformPropertiesProviderModule,
-            CamundaExtensionModule,
+            camundaPlatformBehaviors,
             lintModule,
-          ],
-          moddleExtensions: {
-            camunda: camundaModdleDescriptors,
-          },
+          ]
+          // moddleExtensions: {
+          //   camunda: camundaModdleDescriptors,
+          // },
         })
       );
     };

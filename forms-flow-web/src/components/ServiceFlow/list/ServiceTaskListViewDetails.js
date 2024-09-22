@@ -28,7 +28,7 @@ import { getForm, getSubmission, Formio } from "@aot-technologies/formio-react";
 import { CUSTOM_EVENT_TYPE } from "../constants/customEventTypes";
 import { getTaskSubmitFormReq } from "../../../apiManager/services/bpmServices";
 import { useParams } from "react-router-dom";
-import { push } from "connected-react-router";
+import { push } from "@lagunovsky/redux-react-router";
 import {
     resetFormData,
     setFormSubmissionLoading,

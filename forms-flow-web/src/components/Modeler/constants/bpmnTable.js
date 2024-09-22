@@ -10,7 +10,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { MULTITENANCY_ENABLED } from "../../../constants/constants";
 import { setBpmnSearchText, setIsPublicDiagram } from "../../../actions/processActions";
-import { push } from "connected-react-router";
+import { push } from "@lagunovsky/redux-react-router";
 function BpmnTable() {
   const dispatch = useDispatch();
   const process = useSelector((state) => state.process.processList);

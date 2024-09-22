@@ -6,7 +6,7 @@ import {
   Dropdown,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { push } from "connected-react-router";
+import { push } from "@lagunovsky/redux-react-router";
 import Pagination from "react-js-pagination";
 import {
   setBPMFormLimit,

@@ -1,13 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Provider } from "react-redux";
-import { ConnectedRouter } from "connected-react-router";
+import { ReduxRouter  } from "@lagunovsky/redux-react-router";
 import "../assets/styles/layouts.scss";
 import "../assets/styles/user-styles.css";
 import BaseRouting from "./BaseRouting";
 import { Helmet } from "react-helmet";
 import { KEYCLOAK_URL } from "../constants/constants";
-
+import { BrowserRouter } from "react-router-dom";
 const App = React.memo((props) => {
   const { store, history, publish, subscribe, getKcInstance } = props;
   return (
@@ -15,16 +15,18 @@ const App = React.memo((props) => {
       <Helmet>
         {KEYCLOAK_URL ? <link rel="preconnect" href={KEYCLOAK_URL} /> : null}
       </Helmet>
+      <BrowserRouter>
       <Provider store={store}>
-        <ConnectedRouter history={history}>
+        <ReduxRouter  history={history}>
           <BaseRouting
             store={store}
             publish={publish}
             subscribe={subscribe}
             getKcInstance={getKcInstance}
           />
-        </ConnectedRouter>
+        </ReduxRouter >
       </Provider>
+      </BrowserRouter>
     </div>
   );
 });

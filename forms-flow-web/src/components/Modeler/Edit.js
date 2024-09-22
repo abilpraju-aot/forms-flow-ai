@@ -4,7 +4,7 @@ import BpmnEditor from './Editors/BpmnEditor';
 import { useParams } from "react-router-dom";
 import DmnEditor from './Editors/DmnEditor';
 import { useDispatch } from 'react-redux';
-import { push } from "connected-react-router";
+import { push } from "@lagunovsky/redux-react-router";
 import {
     fetchDiagram,
   } from "../../apiManager/services/processServices";

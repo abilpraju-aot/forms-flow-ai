@@ -240,6 +240,7 @@ const List = React.memo((props) => {
     } catch (err) {
       setImportLoader(false);
       setFormSubmitted(false);
+      console.error("Error:", err);
       setImportError(err?.response?.data?.message);
     }
   };

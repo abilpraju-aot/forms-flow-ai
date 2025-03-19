@@ -1,7 +1,7 @@
 import React from "react";
 import { render as rtlRender, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { Provider } from "react-redux";
+import { Provider,useDispatch } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { createMemoryHistory } from "history";
@@ -50,8 +50,8 @@ jest.mock("../../../../../src/actions/applicationActions", () => ({
     dispatch({ type: "APPLICATION_DETAIL_STATUS_CODE", payload: status });
   }),
 
-  setApplicationDetailLoader: jest.fn().mockImplementation((loading) => (dispatch) => {
-    dispatch({ type: "APPLICATION_DETAIL_LOADER", payload: loading });
+  setApplicationDetailLoader: jest.fn().mockImplementation(() => (dispatch) => {
+    dispatch({ type: "APPLICATION_DETAIL_LOADER", payload: true });
   }),
 }));
 
@@ -69,6 +69,13 @@ jest.mock("@formsflow/components", () => {
     FormSubmissionHistoryModal: () => <div>Form Submission History Modal</div>,
   };
 });
+
+
+jest.mock("react-redux", () => ({
+  ...jest.requireActual("react-redux"),
+  useDispatch: jest.fn(),
+}));
+
 
 const queryClient = new QueryClient();
 
@@ -105,7 +112,7 @@ beforeEach(() => {
       ...mockstate,
       applications: {
         applicationsList: [],
-        applicationDetail: [
+        applicationDetail: 
           {
             created: "2025-02-11T05:15:55.785503Z",
             modified: "2025-02-11T05:22:34.207536Z",
@@ -124,7 +131,6 @@ beforeEach(() => {
             isResubmit: false,
             eventName: null,
           },
-        ],
         applicationProcess: {
           processName: "BusinessNew",
           formProcessMapperId: "531",
@@ -161,12 +167,18 @@ beforeEach(() => {
   });
 });
 
-describe("ViewApplication Component", () => {
-  it("renders the submission view correctly", async () => {
-    const { store } = renderWithProviders(<ViewApplication />);
+const mockDispatch = jest.fn();
 
+describe("ViewApplication Component", () => {
+
+  beforeEach(() => {
+    useDispatch.mockReturnValue(mockDispatch);
+  });
+
+  it("renders the submission view correctly", async () => {
+    renderWithProviders(<ViewApplication />);
     await waitFor(() => {
-      expect(screen.getByText("BusinessNew")).toBeInTheDocument();
+       expect(screen.getByText("Business New")).toBeInTheDocument();
     });
   });
 });

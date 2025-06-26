@@ -167,7 +167,7 @@ const ServiceTaskListViewDetails = React.memo(() => {
         dispatch(setBPMTaskDetailLoader(true));
         dispatch(setSelectedTaskID(null)); // unSelect the Task Selected
         dispatch(fetchServiceTaskList(reqData,null,firstResult)); //Refreshes the Tasks
-        dispatch(push(`${redirectUrl}task/`));
+        dispatch(push(`${redirectUrl}task-old/`));
     };
 
     const reloadCurrentTask = () => {

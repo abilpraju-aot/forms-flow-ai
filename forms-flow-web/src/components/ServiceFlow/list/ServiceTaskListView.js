@@ -78,7 +78,7 @@ const ServiceTaskListView = React.memo((props) => {
   
   
     const getTaskDetails = (taskId) => {
-      dispatch(push(`${redirectUrl.current}task/${taskId}`));
+      dispatch(push(`${redirectUrl.current}task-old/${taskId}`));
     }; 
 
   const handlePageChange = (pageNumber) => {

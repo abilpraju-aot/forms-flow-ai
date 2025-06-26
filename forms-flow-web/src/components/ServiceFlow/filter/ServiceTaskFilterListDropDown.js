@@ -57,7 +57,7 @@ const ServiceFlowFilterListDropDown = React.memo(
               return (
                 <NavDropdown.Item
                   as={Link}
-                  to={`${redirectUrl}task`}
+                  to={`${redirectUrl}task-old`}
                   className={`main-nav nav-item ${
                     filter?.id === selectedFilter?.id ? "active-tab" : ""
                   }`}

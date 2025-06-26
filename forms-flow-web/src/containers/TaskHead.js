@@ -38,7 +38,7 @@ function TaskHead() {
       .finally(() => {
         dispatch(setBPMFilterLoader(false));
       });
-    dispatch(push(`${baseUrl}task`));
+    dispatch(push(`${baseUrl}task-old`));
   };
 
   const changeTaskView = (view) => {

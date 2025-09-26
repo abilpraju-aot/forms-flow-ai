@@ -26,7 +26,7 @@ services:
     ports:
       - '6001:5000'
     volumes:
-      - ./:/app:rw
+      - app_data:/app:rw
     environment:
       DATABASE_URL: ${DATA_ANALYSIS_DB_URL}
       DATABASE_USERNAME: ${DATA_ANALYSIS_DB_USER}
@@ -58,3 +58,4 @@ networks:
 
 volumes:
   db-data:
+  app_data:

@@ -11,7 +11,7 @@ services:
       - '6432:5432'
     restart: unless-stopped
     volumes:
-      - ./postgres/webapi:/var/lib/postgresql/data
+      - webapi_postgres_data:/var/lib/postgresql/data
     networks:
       - forms-flow-webapi-network
 
@@ -26,7 +26,7 @@ services:
     ports:
       - '5000:5000'
     volumes:
-      - ./:/app:rw
+      - app_data:/app:rw
     environment:
       INSIGHT_API_KEY: ${INSIGHT_API_KEY}
       INSIGHT_API_URL: ${INSIGHT_API_URL}
@@ -79,3 +79,5 @@ networks:
 
 volumes:
   mdb-data:
+  webapi_postgres_data:
+  app_data:

@@ -7,7 +7,7 @@ services:
     ports:
       - '5500:8000'
     volumes:
-      - ./:/app:rw
+      - app_data:/app:rw
     environment:
       DEBUG: ${FORMSFLOW_DATA_LAYER_DEBUG:-false}
       FOMRSFLOW_DATA_LAYER_WORKERS: ${FOMRSFLOW_DATA_LAYER_WORKERS:-4}
@@ -51,3 +51,6 @@ services:
 
     stdin_open: true # -i
     tty: true # -t
+
+volumes:
+  app_data:

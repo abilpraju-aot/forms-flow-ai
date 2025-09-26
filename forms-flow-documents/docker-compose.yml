@@ -9,7 +9,7 @@ services:
     ports:
       - '5006:5006'
     volumes:
-      - ./:/app:rw
+      - app_data:/app:rw
     environment:
       DATABASE_URL: ${FORMSFLOW_API_DB_URL:-postgresql://postgres:changeme@forms-flow-webapi-db:5432/webapi}
       DATABASE_USERNAME: ${FORMSFLOW_API_DB_USER}
@@ -54,3 +54,4 @@ networks:
 
 volumes:
   mdb-data:
+  app_data:

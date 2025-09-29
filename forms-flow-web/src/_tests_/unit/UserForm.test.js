@@ -33,7 +33,7 @@ const mockResetSubmissions = jest.fn();
 const mockSaveSubmission = jest.fn();
 const mockGetForm = jest.fn();
 
-jest.mock("@aot-technologies/formio-react", () => {
+jest.mock("react-formio", () => {
   const PropTypes = jest.requireActual('prop-types');
   const FormComponent = ({ onSubmit, onChange, onCustomEvent }) => (
     <div data-testid="formio-form">

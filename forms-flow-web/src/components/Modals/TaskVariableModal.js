@@ -8,7 +8,7 @@ import {
   CustomPill,
   FormInput,
 } from "@formsflow/components";
-import { Form, Utils } from "@aot-technologies/formio-react";
+import { Form, Utils } from "react-formio";
 import PropTypes from "prop-types";
 import { useDispatch ,useSelector } from "react-redux";
 import {

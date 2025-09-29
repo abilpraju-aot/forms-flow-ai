@@ -17,7 +17,7 @@ import {
   setApplicationDetailStatusCode,
 } from "../../../actions/applicationActions";
 import View from "../../../routes/Submit/Submission/Item/View";
-import { getForm, getSubmission } from "@aot-technologies/formio-react";
+import { getForm, getSubmission } from "react-formio";
 import NotFound from "../../../components/NotFound";
 import { useTranslation } from "react-i18next";
 import {

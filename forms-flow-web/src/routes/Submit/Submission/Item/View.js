@@ -6,7 +6,7 @@ import {
   saveSubmission,
   Form,
   selectError,
-} from "@aot-technologies/formio-react";
+} from "react-formio";
 import { push } from "connected-react-router";
 import { useLocation } from "react-router-dom";
 import Loading from "../../../../containers/Loading";

@@ -1,6 +1,6 @@
 import React, {useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectRoot } from "@aot-technologies/formio-react";
+import { selectRoot } from "react-formio";
 import { CLIENT_EDIT_STATUS } from "../../../constants/applicationConstants";
 import {
     setApplicationListActivePage,

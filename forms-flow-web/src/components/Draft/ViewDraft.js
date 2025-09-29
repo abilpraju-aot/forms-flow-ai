@@ -7,7 +7,7 @@ import { Tabs, Tab } from "react-bootstrap";
 import Details from "./Details";
 import Loading from "../../containers/Loading";
 import View from "../../routes/Submit/Submission/Item/View";
-import { getForm } from "@aot-technologies/formio-react";
+import { getForm } from "react-formio";
 import NotFound from "../NotFound";
 import { Translation, useTranslation } from "react-i18next";
 import { MULTITENANCY_ENABLED } from "../../constants/constants";

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Route } from "react-router-dom";
 import { connect } from "react-redux";
-import { getForm } from "@aot-technologies/formio-react";
+import { getForm } from "react-formio";
 // import View from "../routes/Submit/Forms/View";
 import NotFound from "./NotFound";
 import UserForm from "../routes/Submit/Forms/UserForm";

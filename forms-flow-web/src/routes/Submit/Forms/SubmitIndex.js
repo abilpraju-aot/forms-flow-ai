@@ -1,6 +1,6 @@
 import { Route, Switch, Redirect, useParams, useLocation } from "react-router-dom";
 import React, { useEffect } from "react";
-import { Formio, getForm,resetSubmission  } from "@aot-technologies/formio-react";
+import { Formio, getForm,resetSubmission  } from "react-formio";
 import { useDispatch, useSelector } from "react-redux";
 import {
   BASE_ROUTE,

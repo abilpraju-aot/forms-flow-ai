@@ -13,7 +13,7 @@ import {
 } from "../../actions/applicationActions";
 import History from "./ApplicationHistory";
 import View from "../../routes/Submit/Submission/Item/View";
-import { getForm, getSubmission } from "@aot-technologies/formio-react";
+import { getForm, getSubmission } from "react-formio";
 import NotFound from "../NotFound";
 import { Translation,useTranslation } from "react-i18next";
 import { CUSTOM_SUBMISSION_URL,CUSTOM_SUBMISSION_ENABLE, MULTITENANCY_ENABLED } from "../../constants/constants";

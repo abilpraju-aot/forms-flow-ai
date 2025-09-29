@@ -7,7 +7,7 @@ import { addTenantkey } from "../../../helper/helper";
 import {
   selectRoot,
   deleteForm,
-} from "@aot-technologies/formio-react";
+} from "react-formio";
 import Loading from "../../../containers/Loading";
 import { MULTITENANCY_ENABLED, MAX_FILE_SIZE } from "../../../constants/constants";
 import {

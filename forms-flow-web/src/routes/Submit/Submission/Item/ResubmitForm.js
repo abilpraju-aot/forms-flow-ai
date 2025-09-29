@@ -13,7 +13,7 @@ import {
     saveSubmission,
     selectError,
     Errors
-} from "@aot-technologies/formio-react";
+} from "react-formio";
 
 // UI Components and Helpers
 import { useTranslation, Translation } from "react-i18next";

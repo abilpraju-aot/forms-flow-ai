@@ -10,7 +10,7 @@ import {
   Errors,
   getForm,
   Formio,
-} from "@aot-technologies/formio-react";
+} from "react-formio";
 import { useTranslation, Translation } from "react-i18next";
 import isEqual from "lodash/isEqual";
 

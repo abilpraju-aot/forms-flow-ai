@@ -23,7 +23,7 @@ import History from "../../Application/ApplicationHistory";
 import FormEdit from "../../../routes/Submit/Submission/Item/Edit";
 import FormView from "../../../routes/Submit/Submission/Item/View";
 import LoadingOverlay from "react-loading-overlay-ts";
-import { getForm, getSubmission, Formio, resetSubmission } from "@aot-technologies/formio-react";
+import { getForm, getSubmission, Formio, resetSubmission } from "react-formio";
 import { CUSTOM_EVENT_TYPE } from "../constants/customEventTypes";
 import { getTaskSubmitFormReq } from "../../../apiManager/services/bpmServices";
 import { useParams } from "react-router-dom";

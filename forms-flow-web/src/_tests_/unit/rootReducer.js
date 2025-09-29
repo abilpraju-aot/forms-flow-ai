@@ -6,7 +6,7 @@ import formCheckList from '../../modules/formCheckListReducer';
 import tenants from '../../modules/tenantReducer';
 import processReducer from '../../modules/processReducer';
 import formDelete from '../../modules/formReducer';
-import { form, forms,submission } from "@aot-technologies/formio-react";
+import { form, forms,submission } from "react-formio";
 import formRestore from "../../modules/RestoreFormReducer";
 import applications from '../../modules/applicationsReducer';
 import taskAppHistory from '../../modules/taskAppHistoryReducer';

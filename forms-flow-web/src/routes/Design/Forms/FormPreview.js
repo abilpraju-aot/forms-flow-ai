@@ -1,4 +1,4 @@
-import { Form } from "@aot-technologies/formio-react";
+import { Form } from "react-formio";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";

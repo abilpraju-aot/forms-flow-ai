@@ -5,7 +5,7 @@ import App from "./components/App";
 import StoreService from "./services/StoreService";
 import { featureFlags } from "./featureToogle";
 import { FlagsProvider } from "flagged";
-import { Formio, Components } from "@aot-technologies/formio-react";
+import { Formio, Components } from "react-formio";
 import { AppConfig } from "./config";
 import "./resourceBundles/i18n.js";
 

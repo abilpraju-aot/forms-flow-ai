@@ -11,7 +11,7 @@ import {
   } from "../../../apiManager/services/processServices";
 
 import { fetchFormAuthorizationDetials } from "../../../apiManager/services/authorizationService.js";
-import { Formio, getForm } from "@aot-technologies/formio-react";
+import { Formio, getForm } from "react-formio";
 import Loading from "../../../containers/Loading.js";
 import NotFound from "../../../components/NotFound/index.js";
 

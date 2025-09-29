@@ -7,7 +7,7 @@ import {
   FormBuilder,
   deleteForm,
   Form,
-} from "@aot-technologies/formio-react";
+} from "react-formio";
 import {
   CustomButton,
   ConfirmModal,

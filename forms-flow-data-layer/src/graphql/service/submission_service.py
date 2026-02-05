@@ -8,7 +8,7 @@ from src.graphql.schema import (
 )
 from src.models.formio.submission import SubmissionsModel
 from src.models.webapi.application import Application
-from src.utils import get_logger
+from src.utils import get_logger, convert_datetimes_to_string
 
 logger = get_logger(__name__)
 
@@ -125,9 +125,10 @@ class SubmissionService:
             f"extracted filter by mongo {mongo_search} and webapi {webapi_search}"
         )
 
-        is_paginate_on_webapi_side = not mongo_search
         is_sort_on_webapi_side = sort_by in webapi_fields
+        is_paginate_on_webapi_side = not mongo_search and is_sort_on_webapi_side
         sort_params = {"sort_by": sort_by, "sort_order": sort_order}
+        logger.info(f"is_paginate_on_webapi_side: {is_paginate_on_webapi_side}")
         webapi_side_submissions, total_count = (
             await Application.get_authorized_applications(
                 tenant_key=tenant_key,
@@ -182,7 +183,7 @@ class SubmissionService:
                     created_by=row.get("created_by"),
                     application_status=row.get("application_status"),
                     created=row.get("created"),
-                    data=row.get("submission_data", {}),
+                    data=convert_datetimes_to_string(row.get("submission_data", {})),
                 )
                 for row in data
             ],

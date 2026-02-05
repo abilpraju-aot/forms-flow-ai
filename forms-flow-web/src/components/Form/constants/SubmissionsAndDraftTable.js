@@ -39,7 +39,7 @@ const SubmissionsAndDraftTable = ({ fetchSubmissionsAndDrafts }) => {
     const [isDeletionLoading, setIsDeletionLoading] = useState(false);
 
     const pageOptions = [
-        { text: "5", value: 5 },
+        { text: "10", value: 10 },
         { text: "25", value: 25 },
         { text: "50", value: 50 },
         { text: "100", value: 100 },
@@ -174,7 +174,7 @@ const getActionButtons = (item) => {
 
 
 if (isApplicationLoading) {
-  return <TableSkeleton columns={5} rows={7} pagination={7} />;
+  return <TableSkeleton columns={5} rows={10} pagination={7} />;
 }
 
 return (

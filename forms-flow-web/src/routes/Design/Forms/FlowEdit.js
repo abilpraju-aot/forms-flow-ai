@@ -40,6 +40,7 @@ import PropTypes from "prop-types";
 import userRoles from "../../../constants/permissions.js";
 import BPMNViewer from "../../../components/BPMN/BpmnViewer.js";
 import Modal from "react-bootstrap/Modal";  
+import { SystemVariables } from '../../../constants/variables';
 
 const FlowEdit = forwardRef(({ isPublished = false, CategoryType,
   setWorkflowIsChanged,workflowIsChanged, migration, setMigration, redirectUrl,
@@ -480,9 +481,10 @@ const FlowEdit = forwardRef(({ isPublished = false, CategoryType,
           form={form}
           show={showVariableModal}
           onClose={handleCloseVariableModal}
-          saveBtnDisabled={isPublished}
+          saveBtnDisabled={isPublished || !createDesigns}
           savedFormVariables={savedFormVariables}
           primaryBtnAction={handleSaveVariables}
+          systemVariables={SystemVariables}
         />
       )}
     </>

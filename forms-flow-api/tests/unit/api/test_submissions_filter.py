@@ -1,5 +1,6 @@
 """Test suite for analyze submissions filter APIs."""
 
+import json
 from formsflow_api_utils.utils import (
     ANALYZE_SUBMISSIONS_VIEW,
     get_token,
@@ -17,7 +18,8 @@ def filter_payload():
                 "name": "applicationId",
                 "isChecked": True,
                 "sortOrder": 1,
-                "isFormVariable": False
+                "isFormVariable": False,
+                "type": "number"
             },
             {
                 "key": "submitterName",
@@ -25,7 +27,8 @@ def filter_payload():
                 "name": "submitterName",
                 "isChecked": True,
                 "sortOrder": 2,
-                "isFormVariable": False
+                "isFormVariable": False,
+                "type": "textField"
             }
         ]
     }
@@ -57,13 +60,28 @@ def test_create_analyze_submissions_filter(app, client, session, jwt):
     assert response.status_code == 401
 
 
-def test_get_analyze_submissions_filter_list(app, client, session, jwt):
+def test_get_analyze_submissions_filter_list(app, client, session, jwt, create_mapper_custom):
     """Test analyze submissions filter list."""
     token = get_token(jwt, role=ANALYZE_SUBMISSIONS_VIEW, username="reviewer")
     headers = {"Authorization": f"Bearer {token}", "content-type": "application/json"}
     # Test filter list api with no entries
     response = client.get("/submissions-filter", headers=headers)
-    assert response.json == []
+    assert response.json.get("filters") == []
+    assert response.json.get("defaultSubmissionsFilter") is None
+    # Create form mapper entry
+    payload = {
+        "formId": "685bc0c99135c75802703046",
+        "formName": "Sample form",
+        "processKey": "onestepapproval",
+        "processName": "One Step Approval",
+        "status": "active",
+        "comments": "test",
+        "anonymous": False,
+        "formType": "form",
+        "parentFormId": "685bc0c99135c75802703046",
+    }
+    create_mapper_custom(payload)
+    # Create analyze submissions filter entry
     response = client.post(
         "/submissions-filter", headers=headers, json=filter_payload()
     )
@@ -72,7 +90,24 @@ def test_get_analyze_submissions_filter_list(app, client, session, jwt):
     # Test filter list api with valid entries
     response = client.get("/submissions-filter", headers=headers)
     assert response.json != []
-    assert response.json[0].get("id") is not None
+    filters = response.json.get("filters")
+    assert len(filters) == 1
+    assert filters[0].get("parentFormId") == "685bc0c99135c75802703046"
+    assert filters[0].get("formId") == "685bc0c99135c75802703046"
+    assert response.json["filters"][0].get("id") is not None
+    filter_id = response.json["filters"][0].get("id")
+    # Add default submissions filter
+    response = client.post(
+        "/user/default-filter",
+        headers=headers,
+        data=json.dumps({"defaultSubmissionsFilter": filter_id}),
+        content_type="application/json",
+    )
+    assert response.status_code == 200
+    # Check if default submissions filter is set
+    response = client.get("/submissions-filter", headers=headers)
+    assert response.json != []
+    assert response.json.get("defaultSubmissionsFilter") == filter_id
 
 
 def test_get_analyze_submissions_filter_by_id(app, client, session, jwt):

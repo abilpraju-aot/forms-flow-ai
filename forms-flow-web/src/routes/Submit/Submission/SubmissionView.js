@@ -178,8 +178,8 @@ const ViewApplication = React.memo(() => {
         </div>
 
         <div className="buttons">
-          {(viewSubmissionHistory || 
-              analyze_submissions_view_history) && (
+          {((isFromFormEntries && viewSubmissionHistory) ||
+  (!isFromFormEntries && analyze_submissions_view_history)) && (
           <CustomButton
             label={t("History")}
             dataTestId="handle-submission-history-testid"
@@ -189,11 +189,11 @@ const ViewApplication = React.memo(() => {
           />
           )}
 
-          <DownloadPDFButton
+          {(form?._id && submission?._id) && <DownloadPDFButton
             form_id={form._id}
             submission_id={submission._id}
             title={form.title}
-          />
+          />}
         </div>
       </div>
       

@@ -27,6 +27,7 @@ variable = API.model(
         "isChecked": fields.Boolean(description="Is variable checked"),
         "sortOrder": fields.Integer(description="Sort order of the variable"),
         "isFormVariable": fields.Boolean(description="Is this a form variable"),
+        "type": fields.String(description="Type of the variable"),
     },
 )
 
@@ -53,6 +54,28 @@ analyze_submissions_response_model = API.inherit(
             description="Tenant identifier (optional, for multi-tenant support)."
         ),
         "user": fields.String(description="Unique identifier for the user."),
+    },
+)
+
+filter_response_with_default_filter = API.model(
+    "FilterResponseWithDefaultFilter",
+    {
+        "filters": fields.List(
+            fields.Nested(
+                API.inherit(
+                    "AnalyzeSubmissionsResponseWithFormId",
+                    analyze_submissions_response_model,
+                    {
+                        "formId": fields.String(
+                            description="Form ID associated with the filter"
+                        ),
+                    },
+                )
+            )
+        ),
+        "defaultSubmissionsFilter": fields.Integer(
+            description="Default Submissions Filter ID of the user"
+        ),
     },
 )
 
@@ -88,7 +111,7 @@ class SubmissionsFilterPreferencesResource(Resource):
     @profiletime
     @API.doc(
         responses={
-            200: ("OK:- Successful request.", [analyze_submissions_response_model]),
+            200: ("OK:- Successful request.", filter_response_with_default_filter),
             401: "UNAUTHORIZED:- Authorization header not provided or an invalid token passed.",
         }
     )
